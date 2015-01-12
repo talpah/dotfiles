@@ -2,11 +2,11 @@
 
 me = $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-mkdir "${HOME}/bin"
-ln -s "${me}/VirtualEnv" "${HOME}/VirtualEnv"
+mkdir -p "${HOME}/bin"
+[ -l "${HOME}/VirtualEnv" ] || ln -s "${me}/VirtualEnv" "${HOME}/VirtualEnv"
 
 for f in bin/*; do
-  ln -s "${me}/${f}" "${HOME}/${f}"
+  [ -l "${HOME}/${f}" ] || ln -s "${me}/${f}" "${HOME}/${f}"
 done
 
 for f in .bashrc .gitignore .profile .venv; do

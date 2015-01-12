@@ -5,7 +5,7 @@ me=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 mkdir -p "${HOME}/bin"
 [ -L "${HOME}/VirtualEnv" ] || ln -s "${me}/VirtualEnv" "${HOME}/VirtualEnv"
 
-for f in bin/*; do
+for f in ${me}/bin/*; do
   [ -L "${HOME}/${f}" ] || ln -s "${me}/${f}" "${HOME}/${f}"
 done
 

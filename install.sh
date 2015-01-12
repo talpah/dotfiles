@@ -6,7 +6,7 @@ mkdir "${HOME}/bin"
 ln -s "${me}/VirtualEnv" "${HOME}/VirtualEnv"
 
 for f in bin/*; do
-  ln -s "${me}/${f}" "${HOME}/bin/${f}"
+  ln -s "${me}/${f}" "${HOME}/${f}"
 done
 
 for f in .bashrc .gitignore .profile .venv; do

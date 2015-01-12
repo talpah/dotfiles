@@ -1,6 +1,6 @@
 #!/bin/bash
 
-me = $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+me=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 mkdir -p "${HOME}/bin"
 [ -l "${HOME}/VirtualEnv" ] || ln -s "${me}/VirtualEnv" "${HOME}/VirtualEnv"

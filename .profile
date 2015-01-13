@@ -15,35 +15,14 @@ shopt -s checkwinsize      # If window size changes, redraw contents
 shopt -s cmdhist           # Multiline commands are a single command in history.
 shopt -s extglob           # Allows basic regexps in bash.
 
-# ALAISES
-
 # Linux Specific
 export LS_COLORS="di=34;40:ln=35;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=0;42:ow=0;43:"
 export EDITOR='vim'
-
-alias agi="sudo apt-get install"
-alias acs="sudo apt-cache search"
-alias acsh="sudo apt-cache show"
-alias aguu="sudo apt-get update && sudo apt-get upgrade"
-alias ls="ls -F --color"       # Color is handled differently on Linux
 
 # Configs that rely on stuff in the case statement
 export VISUAL=$EDITOR
 export SVN_EDITOR=$VISUAL
 export GIT_EDITOR=$VISUAL
-
-# Global
-# Helpers
-alias grep='grep --color=auto' # Always highlight grep search term
-alias ping='ping -c 5'      # Pings with 5 packets, not unlimited
-alias df='df -h'            # Disk free, in gigabytes, not bytes
-alias du='du -h -c'         # Calculate total disk usage for a folder
-
-# Nifty extras
-alias servethis="python -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
-alias clr='clear;echo "Currently logged in on $(tty), as $(whoami) in directory $(pwd)."'
-alias pypath='python -c "import sys; print sys.path" | tr "," "\n" | grep -v "egg"'
-alias pycclean='find . -name "*.pyc" -exec rm {} \;'
 
 ## PROMPT
 # Prompt Colors

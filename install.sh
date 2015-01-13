@@ -7,7 +7,7 @@ source "${me}/bin/install_essentials.sh"
 
 # User bin
 mkdir -p "${HOME}/bin"
-[ -L "${HOME}/VirtualEnv" ] || ln -s "${me}/VirtualEnv" "${HOME}/VirtualEnv"
+[ -e "${HOME}/VirtualEnv" ] || ln -s "${me}/VirtualEnv" "${HOME}/VirtualEnv"
 for f in $(ls ${me}/bin/*); do
   f=$(basename "${f}")
   # No overrides

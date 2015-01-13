@@ -29,3 +29,7 @@ cd $HOME
 git clone git@github.com:talpah/dotfiles.git .dotfiles
 .dotfiles/install.sh
 ```
+## Uninstall
+```bash
+~/.dotfiles/uninstall.sh
+```

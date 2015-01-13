@@ -33,5 +33,5 @@ virtualenv "${WORKON_HOME}/local"
 mkdir -p "${HOME}/Projects"
 mkdir -p "${HOME}/Applications"
 
-source .bashrc
+source "${HOME}.bashrc"
 echo "You should re-login to make available for all sessions"

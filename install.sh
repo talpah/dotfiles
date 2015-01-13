@@ -27,7 +27,7 @@ done
 
 # Default virtualenv
 export WORKON_HOME="${me}/VirtualEnv"
-virtualenv "local"
+virtualenv "${WORKON_HOME}/local"
 
 # Default tree
 mkdir -p "${HOME}/Projects"

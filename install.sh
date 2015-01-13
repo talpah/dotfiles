@@ -15,7 +15,7 @@ done
 
 # Actual dot files :)
 for f in .bashrc .gitignore .profile .venv; do
-  rm "${HOME}/${f}"
+  mv "${HOME}/${f}" "${me}/backup/${f}"
   ln -s "${me}/${f}" "${HOME}/${f}"
 done
 

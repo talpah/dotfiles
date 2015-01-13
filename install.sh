@@ -16,7 +16,7 @@ done
 
 # Actual dot files :)
 for f in .bashrc .gitignore .profile .venv; do
-  if [[ -f "${me}/backup/${f}" ]]; then
+  if [[ -e "${me}/backup/${f}" ]]; then
     # Already backed up
     rm "${HOME}/${f}"
   else

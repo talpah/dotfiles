@@ -9,3 +9,6 @@ for f in .bashrc .profile .venv; do
     mv "${me}/backup/${f}" "${HOME}/${f}"
   fi
 done
+
+echo "Removing self"
+(rm -rf "${me}")

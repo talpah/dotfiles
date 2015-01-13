@@ -1,5 +1,7 @@
 # dotfiles
 
+![](https://raw.githubusercontent.com/talpah/dotfiles/master/help/screen1.png)
+
 * Prompt:
   * Color
   * Current git branch

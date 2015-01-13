@@ -112,6 +112,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-export WORKON_HOME="{{VirtualEnvPath}}"
+export WORKON_HOME="${HOME}/.dotfiles/VirtualEnv"
 source .profile
 cd 

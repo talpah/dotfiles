@@ -7,7 +7,6 @@ source "${me}/bin/install_essentials.sh"
 
 # User bin
 mkdir -p "${HOME}/bin"
-[ -e "${HOME}/VirtualEnv" ] || ln -s "${me}/VirtualEnv" "${HOME}/VirtualEnv"
 for f in $(ls ${me}/bin/*); do
   f=$(basename "${f}")
   # No overrides
@@ -27,7 +26,8 @@ for f in .bashrc .profile .venv; do
 done
 
 # Default virtualenv
-virtualenv "${HOME}/VirtualEnv/local"
+export WORKON_HOME="${me}/VirtualEnv"
+virtualenv "local"
 
 # Default tree
 mkdir -p "${HOME}/Projects"

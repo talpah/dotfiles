@@ -2,7 +2,7 @@
 
 me=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-for f in .bashrc .profile .venv; do
+for f in .bash_aliases .bashrc .profile .venv; do
   if [[ -e "${me}/backup/${f}" ]]; then
     echo "Restoring ${f}"
     rm "${HOME}/${f}"

@@ -18,6 +18,11 @@
 
 ## Install
 #### Via archive
+Pre-requirements:
+```bash
+sudo apt-get install curl
+```
+Install
 ```bash
 cd $HOME
 curl -L https://github.com/talpah/dotfiles/archive/master.tar.gz | tar xz

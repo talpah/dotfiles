@@ -28,7 +28,7 @@ mv dotfiles-master .dotfiles
 #### Via git (updatable)
 ```bash
 cd $HOME
-git clone git@github.com:talpah/dotfiles.git .dotfiles
+git clone http://github.com/talpah/dotfiles.git .dotfiles
 .dotfiles/install.sh
 ```
 ## Uninstall

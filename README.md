@@ -26,6 +26,11 @@ mv dotfiles-master .dotfiles
 ```
 
 #### Via git (updatable)
+Pre-requirements:
+```bash
+sudo apt-get install git
+```
+Install
 ```bash
 cd $HOME
 git clone http://github.com/talpah/dotfiles.git .dotfiles

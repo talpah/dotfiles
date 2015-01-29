@@ -11,6 +11,7 @@ sudo apt-get install -y lxc-docker
 
 sudo apt-get install -y \
 curl \
+tree \
 git \
 mc \
 htop \

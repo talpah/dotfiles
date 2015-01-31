@@ -14,7 +14,7 @@ for f in $(ls ${me}/bin/*); do
 done
 
 # Actual dot files :)
-for f in .bash_aliases .bashrc .profile .venv; do
+for f in .bash_aliases .bashrc .profile .venv .gitconfig; do
   if [[ -e "${me}/backup/${f}" ]]; then
     # Already backed up
     rm "${HOME}/${f}"

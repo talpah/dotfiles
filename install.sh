@@ -35,3 +35,4 @@ mkdir -p "${HOME}/Applications"
 
 source "${HOME}/.bashrc"
 echo "You should re-login to make available for all sessions"
+echo "To install extra goodies run ${me}/bin/install_goodies.sh"

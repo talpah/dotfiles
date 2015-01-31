@@ -10,6 +10,7 @@ sudo apt-get update
 sudo apt-get install -y lxc-docker
 
 sudo apt-get install -y \
+dos2unix \
 mc \
 htop \
 vim \

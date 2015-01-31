@@ -3,18 +3,18 @@
 ![](https://raw.githubusercontent.com/talpah/dotfiles/master/help/screen1.png)
 
 * Prompt:
-  * Color
-  * Current git branch
-  * Current virtualenv
-  * Auto change virtualenv via .venv files
-* Essentials:
+  * Shows current path, current git branch, and current virtualenv on the first line.
+  * Auto switches virtualenv via `.venv` files inside directories when `cd`-ing.
+
+* Essential packages installed:
   * curl 
   * tree 
   * git 
   * python2.7 
   * python-dev 
   * python-virtualenv
- * Goodies:
+
+* Optional goodies packages (see [Bonus Goodies](#bonus-goodies)):
   * docker
   * dos2unix 
   * mc 

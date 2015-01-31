@@ -2,4 +2,8 @@
 sudo apt-get install -y \
 curl \
 tree \
-git
+git \
+python2.7 \
+python-dev \
+python-virtualenv \
+

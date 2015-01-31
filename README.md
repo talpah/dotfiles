@@ -8,21 +8,29 @@
   * Current virtualenv
   * Auto change virtualenv via .venv files
 * Essentials:
-  * git
-  * virtualenv
-  * mc
-  * htop
-  * vim
-  * build-essential
-  * [docker](http://docker.io)
+  * curl 
+  * tree 
+  * git 
+  * python2.7 
+  * python-dev 
+  * python-virtualenv
+ * Goodies:
+  * docker
+  * dos2unix 
+  * mc 
+  * htop 
+  * vim 
+  * build-essential 
+  * libmysqlclient-dev
 
-## Install
-#### Via archive
-Pre-requirements:
+## Installing
+
+### Via archive
+#### Pre-requirements:
 ```bash
 sudo apt-get install curl
 ```
-Install
+#### Install
 ```bash
 cd $HOME
 curl -L https://github.com/talpah/dotfiles/archive/master.tar.gz | tar xz
@@ -30,17 +38,23 @@ mv dotfiles-master .dotfiles
 .dotfiles/install.sh
 ```
 
-#### Via git (updatable)
-Pre-requirements:
+### Via git (updatable)
+#### Pre-requirements:
 ```bash
 sudo apt-get install git
 ```
-Install
+#### Install
 ```bash
 cd $HOME
 git clone http://github.com/talpah/dotfiles.git .dotfiles
 .dotfiles/install.sh
 ```
+
+### Bonus goodies
+```bash
+$HOME/.dotfiles/bin/install_goodies.sh
+```
+
 ## Uninstall
 ```bash
 ~/.dotfiles/uninstall.sh

@@ -64,5 +64,3 @@ if ! shopt -oq posix; then
   fi
 fi
 export WORKON_HOME="${HOME}/.dotfiles/VirtualEnv"
-source "${HOME}/.profile"
-cd 

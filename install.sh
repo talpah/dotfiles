@@ -29,7 +29,7 @@ git config --global include.path "${me}/.gitconfig"
 
 # Default virtualenv
 export WORKON_HOME="${me}/VirtualEnv"
-virtualenv "${WORKON_HOME}/local"
+
 
 # Default tree
 mkdir -p "${HOME}/Projects"

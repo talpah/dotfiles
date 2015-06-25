@@ -36,7 +36,7 @@ alias df='df -h'            # Disk free, in gigabytes, not bytes
 alias du='du -h -c'         # Calculate total disk usage for a folder
 
 # Nifty extras
-alias servethis="python -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
+alias servethis='python -m SimpleHTTPServer 8080'
 alias clr='clear;echo "Currently logged in on $(tty), as $(whoami) in directory $(pwd)."'
 alias pypath='python -c "import sys; print sys.path" | tr "," "\n" | grep -v "egg"'
 alias pycclean='find . -name "*.pyc" -exec rm {} \;'

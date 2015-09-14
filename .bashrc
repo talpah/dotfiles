@@ -63,4 +63,4 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-export WORKON_HOME="${HOME}/.dotfiles/VirtualEnv"
+export WORKON_HOME="${HOME}/VirtualEnv"

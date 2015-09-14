@@ -6,6 +6,9 @@ fi
 
 curl -sSL https://get.docker.com/ | sh
 sudo pip install docker-compose
+sudo usermod -aG docker $USER
+sudo systemctl enable docker
+sudo service docker start
 
 sudo apt-get install -y \
 dos2unix \

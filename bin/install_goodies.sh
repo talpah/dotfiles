@@ -5,6 +5,7 @@ if [ ! -e /usr/lib/apt/methods/https ]; then
 fi
 
 curl -sSL https://get.docker.com/ | sh
+sudo pip install docker-compose
 
 sudo apt-get install -y \
 dos2unix \

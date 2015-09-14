@@ -28,7 +28,7 @@ done
 git config --global include.path "${me}/.gitconfig"
 
 # Default virtualenv
-export WORKON_HOME="${me}/VirtualEnv"
+export WORKON_HOME="${HOME}/VirtualEnv"
 
 
 # Default tree

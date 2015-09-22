@@ -1,10 +1,6 @@
 # dotfiles
 
-![](https://raw.githubusercontent.com/talpah/dotfiles/master/help/screen1.png)
-
-* Prompt:
-  * Shows current path, current git branch, and current virtualenv on the first line.
-  * Auto switches virtualenv via `.venv` files inside directories when `cd`-ing.
+Oh-my-zsh with powerlevel9k theme and powerline fonts
 
 * Essential packages installed:
   * curl 
@@ -13,6 +9,9 @@
   * python2.7 
   * python-dev 
   * python-virtualenv
+  * zsh
+  * oh-my-zsh
+  * powerline fonts
 
 * Optional goodies packages (see [Bonus Goodies](#bonus-goodies)):
   * docker
@@ -33,8 +32,8 @@ sudo apt-get install curl
 #### Install
 ```bash
 cd $HOME
-curl -L https://github.com/talpah/dotfiles/archive/master.tar.gz | tar xz
-mv dotfiles-master .dotfiles
+curl -L https://github.com/talpah/dotfiles/archive/zsh.tar.gz | tar xz
+mv dotfiles-zsh .dotfiles
 .dotfiles/install.sh
 ```
 
@@ -47,6 +46,7 @@ sudo apt-get install git
 ```bash
 cd $HOME
 git clone http://github.com/talpah/dotfiles.git .dotfiles
+git checkout zsh
 .dotfiles/install.sh
 ```
 

@@ -45,9 +45,8 @@ sudo apt-get install git
 #### Install
 ```bash
 cd $HOME
-git clone http://github.com/talpah/dotfiles.git .dotfiles
-git checkout zsh
-.dotfiles/install.sh
+git clone -b zsh http://github.com/talpah/dotfiles.git .dotfiles
+.install.sh
 ```
 
 ### Bonus goodies

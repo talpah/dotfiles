@@ -14,7 +14,7 @@ for f in $(ls ${me}/bin/*); do
 done
 
 # Actual dot files :)
-for f in .bash_aliases .bashrc .profile .venv; do
+for f in .zshrc .venv; do
   if [[ -e "${me}/backup/${f}" ]]; then
     # Already backed up
     rm "${HOME}/${f}"
@@ -36,6 +36,7 @@ mkdir -p "${HOME}/Projects"
 mkdir -p "${HOME}/Applications"
 mkdir -p "${HOME}/VirtualEnv"
 
-source "${HOME}/.bashrc"
+chsh -s /bin/zsh
 echo "You should re-login to make available for all sessions"
+echo "Remember to select a Powerline font for the terminal"
 echo "To install extra goodies run ${me}/bin/install_goodies.sh"

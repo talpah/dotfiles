@@ -6,8 +6,13 @@ export ZSH=/home/cosmin/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 ZSH_THEME="powerlevel9k/powerlevel9k"
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context virtualenv vcs dir)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir virtualenv vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(longstatus history time)
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_VIRTUALENV_FOREGROUND='black'
+POWERLEVEL9K_VIRTUALENV_BACKGROUND='085'
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="╭"
+POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="╰ "
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

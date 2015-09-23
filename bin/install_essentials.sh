@@ -14,6 +14,8 @@ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/i
 cd ~/.oh-my-zsh/custom
 git clone https://github.com/bhilburn/powerlevel9k.git themes/powerlevel9k
 
+sudo pip install virtualenvwrapper
+
 mkdir -p ~/tmp/fonts
 cd ~/tmp/fonts
 git clone git@github.com:powerline/fonts.git .

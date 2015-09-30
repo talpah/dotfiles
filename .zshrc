@@ -56,7 +56,7 @@ POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="╰ "
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git common-aliases docker docker-compose git-extras git-flow pip sudo virtualenv virtualenvwrapper django)
+plugins=(git common-aliases docker docker-compose git-flow pip sudo virtualenv virtualenvwrapper django command-not-found)
 
 # User configuration
 

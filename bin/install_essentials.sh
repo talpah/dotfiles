@@ -18,5 +18,5 @@ sudo pip install virtualenvwrapper
 
 mkdir -p ~/tmp/fonts
 cd ~/tmp/fonts
-git clone git@github.com:powerline/fonts.git .
+git clone https://github.com/powerline/fonts.git .
 ./install.sh

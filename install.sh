@@ -34,7 +34,6 @@ export WORKON_HOME="${HOME}/VirtualEnv"
 # Default tree
 mkdir -p "${HOME}/Projects"
 mkdir -p "${HOME}/Applications"
-mkdir -p "${HOME}/VirtualEnv"
 
 chsh -s /bin/zsh
 echo "You should re-login to make available for all sessions"

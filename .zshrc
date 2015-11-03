@@ -7,7 +7,7 @@ export ZSH="${HOME}/.oh-my-zsh"
 # time that oh-my-zsh is loaded.
 ZSH_THEME="powerlevel9k/powerlevel9k"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir virtualenv vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(longstatus history time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status history time)
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_VIRTUALENV_FOREGROUND='black'
 POWERLEVEL9K_VIRTUALENV_BACKGROUND='085'
@@ -56,7 +56,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git common-aliases docker docker-compose git-flow pip sudo virtualenv virtualenvwrapper django command-not-found)
+plugins=(git common-aliases docker docker-compose git-flow pip sudo virtualenv virtualenvwrapper django command-not-found thefuck)
 
 # User configuration
 
@@ -89,5 +89,5 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-TERM=xterm-256color
-WORKON_HOME="${HOME}/virtualenv"
+export WORKON_HOME="${HOME}/virtualenv"
+export TERM="xterm-256color" 

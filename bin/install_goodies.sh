@@ -11,7 +11,11 @@ sudo usermod -aG docker $USER
 sudo systemctl enable docker
 sudo service docker start
 
+sudo add-apt-repository -y ppa:webupd8team/terminix
+sudo apt-get update
+
 sudo apt-get install -y \
+terminix \
 dos2unix \
 mc \
 htop \

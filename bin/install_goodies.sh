@@ -3,7 +3,8 @@ if [ ! -e /usr/lib/apt/methods/https ]; then
 	sudo apt-get update
 	sudo apt-get install -y apt-transport-https
 fi
-
+sudo apt-get install python-pip python-yaml
+sudo -H pip install -U pip
 curl -sSL https://get.docker.com/ | sh
 sudo pip install docker-compose
 sudo usermod -aG docker $USER

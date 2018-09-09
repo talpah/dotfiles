@@ -14,7 +14,7 @@ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/i
 cd ~/.oh-my-zsh/custom
 git clone https://github.com/bhilburn/powerlevel9k.git themes/powerlevel9k
 
-sudo pip install virtualenvwrapper thefuck
+sudo -H pip install virtualenvwrapper pipenv 
 
 mkdir -p ~/tmp/fonts
 cd ~/tmp/fonts

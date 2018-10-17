@@ -62,7 +62,7 @@ plugins=(git github common-aliases docker docker-compose git-flow pip sudo virtu
 
 # User configuration
 
-export PATH="${HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+export PATH="${HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -91,5 +91,9 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias git=hub
 export WORKON_HOME="${HOME}/virtualenv"
 export PIPENV_SHELL="/bin/zsh"
+if [[ $TILIX_ID ]]; then
+        source /etc/profile.d/vte.sh
+fi

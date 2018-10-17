@@ -21,7 +21,5 @@ mc \
 htop \
 vim \
 build-essential \
-libmysqlclient-dev \
-git-flow
+libmysqlclient-dev 
 
-sudo wget -O /etc/bash_completion.d/git-flow-completion.bash "https://raw.githubusercontent.com/bobthecow/git-flow-completion/master/git-flow-completion.bash"

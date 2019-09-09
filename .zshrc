@@ -58,7 +58,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git github common-aliases docker docker-compose git-flow pip sudo virtualenv virtualenvwrapper django command-not-found)
+plugins=(git common-aliases docker docker-compose pipenv python pyenv pip django fabric sudo command-not-found ssh-agent aws)
 
 # User configuration
 
@@ -66,6 +66,9 @@ export PATH="${HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
+if [[ -e $HOME/.zshenv ]]; then
+	source $HOME/.zshenv
+fi
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -92,8 +95,20 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias git=hub
-export WORKON_HOME="${HOME}/virtualenv"
 export PIPENV_SHELL="/bin/zsh"
 if [[ $TILIX_ID ]]; then
         source /etc/profile.d/vte.sh
 fi
+function auto_pipenv_shell {
+    if [ ! -n "${PIPENV_ACTIVE+1}" ]; then
+        if [ -f "Pipfile" ] ; then
+            pipenv shell 
+        fi
+    fi
+}
+
+function cdp {
+    builtin cd "$@"
+    auto_pipenv_shell
+}
+alias spt="ssh -t www-data@tesla 'cd /var/www/rebagg && ./manage.py shell_plus'"

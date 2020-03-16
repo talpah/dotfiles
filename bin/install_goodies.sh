@@ -15,11 +15,8 @@ sudo add-apt-repository -y ppa:webupd8team/terminix
 sudo apt-get update
 
 sudo apt-get install -y \
-terminix \
-dos2unix \
+tilix \
 mc \
 htop \
 vim \
-build-essential \
-libmysqlclient-dev 
-
+build-essential

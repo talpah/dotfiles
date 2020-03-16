@@ -36,7 +36,7 @@ POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="╰ "
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
@@ -71,7 +71,7 @@ if [[ -e $HOME/.zshenv ]]; then
 fi
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -94,21 +94,4 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias git=hub
 export PIPENV_SHELL="/bin/zsh"
-if [[ $TILIX_ID ]]; then
-        source /etc/profile.d/vte.sh
-fi
-function auto_pipenv_shell {
-    if [ ! -n "${PIPENV_ACTIVE+1}" ]; then
-        if [ -f "Pipfile" ] ; then
-            pipenv shell 
-        fi
-    fi
-}
-
-function cdp {
-    builtin cd "$@"
-    auto_pipenv_shell
-}
-alias spt="ssh -t www-data@tesla 'cd /var/www/rebagg && ./manage.py shell_plus'"

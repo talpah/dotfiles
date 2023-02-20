@@ -1,22 +1,17 @@
-#!/bin/bash
-if [ ! -e /usr/lib/apt/methods/https ]; then
-	sudo apt-get update
-	sudo apt-get install -y apt-transport-https
-fi
-sudo apt-get install python-pip python-yaml
-sudo -H pip install -U pip
-curl -sSL https://get.docker.com/ | sh
-sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo usermod -aG docker $USER
-sudo systemctl enable docker
-sudo service docker start
+#!/bin/sh
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg lsb-release tilix mc htop vim build-essential
 
-sudo add-apt-repository -y ppa:webupd8team/terminix
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+
+test -f "/etc/apt/keyrings/docker.gpg" || curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
 sudo apt-get update
 
-sudo apt-get install -y \
-tilix \
-mc \
-htop \
-vim \
-build-essential
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo usermod -aG docker $USER

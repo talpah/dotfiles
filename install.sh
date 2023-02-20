@@ -30,12 +30,8 @@ done
 git config --global include.path "${me}/.gitconfig"
 
 # Default tree
-mkdir -p "${HOME}/virtualenv"
 mkdir -p "${HOME}/Projects"
 mkdir -p "${HOME}/Applications"
-
-# Default virtualenv
-export WORKON_HOME="${HOME}/virtualenv"
 
 # Switch to zsh
 chsh -s /bin/zsh
@@ -43,5 +39,5 @@ chsh -s /bin/zsh
 echo "You should re-login to make available for all sessions"
 echo "Remember to select a Powerline font for the terminal"
 echo "To install extra goodies run ${me}/bin/install_goodies.sh"
-echo "To install Gnome extensions run ${me}/bin/install_gnome_extensions.sh"
+
 

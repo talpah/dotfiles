@@ -6,21 +6,17 @@ Oh-my-zsh with [powerlevel9k](https://github.com/bhilburn/powerlevel9k) theme an
   * curl 
   * tree 
   * git 
-  * python2.7 
-  * python-dev 
-  * python-virtualenv
   * zsh
   * oh-my-zsh
   * powerline fonts
 
 * Optional goodies packages (see [Bonus Goodies](#bonus-goodies)):
   * docker
-  * dos2unix 
+  * tilix
   * mc 
   * htop 
   * vim 
   * build-essential 
-  * libmysqlclient-dev
 
 ## Installing
 

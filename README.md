@@ -1,6 +1,6 @@
 # dotfiles
 
-Oh-my-zsh with [powerlevel9k](https://github.com/bhilburn/powerlevel9k) theme and [powerline](https://github.com/powerline/fonts) fonts
+Oh-my-zsh with [powerlevel10k](https://github.com/romkatv/powerlevel10k.git) theme and [powerline](https://github.com/powerline/fonts) fonts
 
 * Essential packages installed:
   * curl 

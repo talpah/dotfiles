@@ -1,22 +1,17 @@
-#!/bin/bash
-if [ ! -e /usr/lib/apt/methods/https ]; then
-	sudo apt-get update
-	sudo apt-get install -y apt-transport-https
-fi
+#!/bin/sh
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg lsb-release tilix mc htop vim build-essential
 
-curl -sSL https://get.docker.com/ | sh
-sudo pip install docker-compose
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+
+test -f "/etc/apt/keyrings/docker.gpg" || curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
 sudo usermod -aG docker $USER
-sudo systemctl enable docker
-sudo service docker start
-
-sudo apt-get install -y \
-dos2unix \
-mc \
-htop \
-vim \
-build-essential \
-libmysqlclient-dev \
-git-flow
-
-sudo wget -O /etc/bash_completion.d/git-flow-completion.bash "https://raw.githubusercontent.com/bobthecow/git-flow-completion/master/git-flow-completion.bash"

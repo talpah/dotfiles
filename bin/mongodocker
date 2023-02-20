@@ -1,9 +1,0 @@
-#!/bin/bash
-
-#docker run --name mongod -d mongo
-docker start mongod
-if [[ -z "$1" ]]; then
-    docker run -it --link mongod:mongo --rm -v ~/Mongo:/root/Mongo mongo sh -c 'exec mongo "$MONGO_PORT_27017_TCP_ADDR:$MONGO_PORT_27017_TCP_PORT/test"'
-else
-    docker run -it --link mongod:mongo --rm -v ~/Mongo:/root/Mongo mongo bash
-fi

@@ -6,7 +6,7 @@ Modern development environment setup with Oh-my-zsh, [Powerlevel10k](https://git
 
 ```bash
 # Via git (recommended)
-git clone -b zsh https://github.com/talpah/dotfiles.git ~/.dotfiles
+git clone https://github.com/talpah/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 make install
 
@@ -37,14 +37,14 @@ make goodies
 
 ### Via archive
 ```bash
-curl -L https://github.com/talpah/dotfiles/archive/zsh.tar.gz | tar xz
-mv dotfiles-zsh ~/.dotfiles
+curl -L https://github.com/talpah/dotfiles/archive/master.tar.gz | tar xz
+mv dotfiles-master ~/.dotfiles
 ~/.dotfiles/install.sh
 ```
 
 ### Via git (recommended)
 ```bash
-git clone -b zsh https://github.com/talpah/dotfiles.git ~/.dotfiles
+git clone https://github.com/talpah/dotfiles.git ~/.dotfiles
 ~/.dotfiles/install.sh
 ```
 

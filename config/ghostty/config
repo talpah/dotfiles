@@ -18,6 +18,10 @@ keybind = global:ctrl+grave_accent=toggle_quick_terminal
 
 theme = Dracula+
 background-opacity = 0.95
+font-family = "JetBrainsMono Nerd Font"
+font-size = 11
+font-feature = calt
+font-feature = liga
 
 # Split navigation with Alt + Arrow keys
 keybind = alt+left=goto_split:left

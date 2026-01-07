@@ -1,117 +1,108 @@
+# SSH agent - quiet mode
 zstyle :omz:plugins:ssh-agent quiet yes
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# Enable Powerlevel10k instant prompt (keep at top)
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Path to your oh-my-zsh installation.
+# ============================================================================
+# Oh My Zsh Configuration
+# ============================================================================
+
 export ZSH="${HOME}/.oh-my-zsh"
-export TERM="xterm-256color"
-
-
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
+# Completion settings
 COMPLETION_WAITING_DOTS="true"
+ZSH_DISABLE_COMPFIX=true
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git common-aliases docker docker-compose python pip sudo command-not-found ssh-agent aws zsh-navigation-tools)
-
-# User configuration
-
-export PATH="${HOME}/bin:${HOME}/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
-# export MANPATH="/usr/local/man:$MANPATH"
+# Plugins (docker includes compose v2 support)
+plugins=(
+    git
+    common-aliases
+    docker
+    python
+    pip
+    sudo
+    command-not-found
+    ssh-agent
+    aws
+    zsh-navigation-tools
+    ruff
+)
 
 source $ZSH/oh-my-zsh.sh
-if [[ -e $HOME/.zshenv ]]; then
-	source $HOME/.zshenv
+
+# ============================================================================
+# Modern ZSH Settings
+# ============================================================================
+
+# History improvements
+setopt EXTENDED_HISTORY          # Write timestamp to history
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicates first
+setopt HIST_IGNORE_DUPS          # Don't record duplicates
+setopt HIST_IGNORE_SPACE         # Don't record commands starting with space
+setopt HIST_VERIFY               # Show command before running from history
+setopt SHARE_HISTORY             # Share history between sessions
+
+# Directory navigation
+setopt AUTO_CD                   # cd by typing directory name
+setopt AUTO_PUSHD                # Push directories onto stack
+setopt PUSHD_IGNORE_DUPS         # Don't push duplicates
+setopt PUSHD_SILENT              # Don't print directory stack
+
+# Globbing
+setopt EXTENDED_GLOB             # Extended globbing syntax
+
+# Completion improvements
+setopt COMPLETE_IN_WORD
+setopt AUTO_MENU
+setopt AUTO_LIST
+
+# ============================================================================
+# PATH Configuration
+# ============================================================================
+
+# Helper function to add to PATH only if directory exists and not already in PATH
+add_to_path() {
+    if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+        export PATH="$1:$PATH"
+    fi
+}
+
+# Add custom paths
+add_to_path "${HOME}/bin"
+add_to_path "${HOME}/.local/bin"
+
+# ============================================================================
+# Environment
+# ============================================================================
+
+export LANG=en_US.UTF-8
+export EDITOR=vim
+
+# Load local environment if exists
+[[ -e "$HOME/.zshenv" ]] && source "$HOME/.zshenv"
+
+# ============================================================================
+# Completions
+# ============================================================================
+
+# Custom completions (ruff, etc.)
+fpath=(~/.dotfiles/zfunc $fpath)
+
+# Cache completions for faster startup (rebuild daily)
+autoload -Uz compinit
+if [[ -n ${HOME}/.zcompdump(#qN.mh+24) ]]; then
+    compinit
+else
+    compinit -C
 fi
 
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-export PIPENV_SHELL="/bin/zsh"
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-export PATH="$HOME/.poetry/bin:$PATH"
-
-#export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-#export PYENV_ROOT="$HOME/.pyenv"
-#command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-#eval "$(pyenv init -)"
-
-
-# fnm
-#export PATH="$HOME/.local/share/fnm:$PATH"
-#eval "`fnm env`"
+# ============================================================================
+# Key Bindings
+# ============================================================================
 
 # zsh-navigation-tools
 zle -N znt-cd-widget
@@ -119,4 +110,30 @@ bindkey "^B" znt-cd-widget
 zle -N znt-kill-widget
 bindkey "^Y" znt-kill-widget
 
+# ============================================================================
+# Tool Integrations
+# ============================================================================
+
+# Powerlevel10k prompt config
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Homebrew (Linuxbrew)
+if [[ -d /home/linuxbrew/.linuxbrew ]]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+# LM Studio CLI
+[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
+
+# SOPS encryption
+export SOPS_AGE_KEY_FILE="$HOME/.sops/age.agekey"
+
+# ============================================================================
+# Aliases
+# ============================================================================
+
+# GitLab merge request
 alias mr='glab mr create -t "$(git rev-parse --abbrev-ref HEAD)" -d "Resolve $(git rev-parse --abbrev-ref HEAD)"'
+
+# batcat (Ubuntu package name)
+command -v batcat &> /dev/null && alias bat='batcat'

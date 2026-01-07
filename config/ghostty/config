@@ -1,0 +1,26 @@
+# Single instance mode - reuse existing Ghostty instance
+gtk-single-instance = true
+quit-after-last-window-closed = "true"
+quit-after-last-window-closed-delay = 5m
+gtk-titlebar-style = tabs
+
+
+# Quick terminal configuration (fullscreen)
+quick-terminal-position = center
+quick-terminal-size = 100%,100%
+quick-terminal-autohide = false
+quick-terminal-screen = mouse
+
+
+# Global keybind to toggle quick terminal (Ctrl+`)
+# Note: ~ key is typically grave/backtick
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
+
+theme = Dracula+
+background-opacity = 0.95
+
+# Split navigation with Alt + Arrow keys
+keybind = alt+left=goto_split:left
+keybind = alt+right=goto_split:right
+keybind = alt+up=goto_split:up
+keybind = alt+down=goto_split:down

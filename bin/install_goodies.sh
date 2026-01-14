@@ -21,8 +21,13 @@ source /etc/os-release
 readonly OS_ID="${ID}"
 readonly OS_CODENAME="${VERSION_CODENAME:-}"
 
-if [[ "${OS_ID}" != "ubuntu" && "${OS_ID}" != "debian" ]]; then
-    log_error "This script only supports Ubuntu and Debian"
+# Pop!_OS is Ubuntu-based, so use ubuntu for repository URLs
+if [[ "${OS_ID}" == "pop" ]]; then
+    readonly REPO_OS="ubuntu"
+elif [[ "${OS_ID}" == "ubuntu" || "${OS_ID}" == "debian" ]]; then
+    readonly REPO_OS="${OS_ID}"
+else
+    log_error "This script only supports Ubuntu, Debian, and Pop!_OS"
     exit 1
 fi
 
@@ -55,7 +60,7 @@ if [[ ! -f "/usr/share/keyrings/gitlab-cli-archive-keyring.gpg" ]]; then
     log_info "  Adding GitLab CLI repository..."
     curl -fsSL https://packages.gitlab.com/gpg.key \
         | sudo gpg --dearmor -o /usr/share/keyrings/gitlab-cli-archive-keyring.gpg 2>/dev/null
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gitlab-cli-archive-keyring.gpg] https://packages.gitlab.com/gitlab/glab-cli/${OS_ID} ${OS_CODENAME} main" \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gitlab-cli-archive-keyring.gpg] https://packages.gitlab.com/gitlab/glab-cli/${REPO_OS} ${OS_CODENAME} main" \
         | sudo tee /etc/apt/sources.list.d/gitlab-cli.list > /dev/null
 else
     log_info "  GitLab CLI repository already configured"
@@ -64,9 +69,9 @@ fi
 # Docker repo
 if [[ ! -f "/etc/apt/keyrings/docker.gpg" ]]; then
     log_info "  Adding Docker repository..."
-    curl -fsSL "https://download.docker.com/linux/${OS_ID}/gpg" \
+    curl -fsSL "https://download.docker.com/linux/${REPO_OS}/gpg" \
         | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/${OS_ID} ${OS_CODENAME} stable" \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/${REPO_OS} ${OS_CODENAME} stable" \
         | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 else
     log_info "  Docker repository already configured"

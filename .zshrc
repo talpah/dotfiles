@@ -137,3 +137,4 @@ alias mr='glab mr create -t "$(git rev-parse --abbrev-ref HEAD)" -d "Resolve $(g
 
 # batcat (Ubuntu package name)
 command -v batcat &> /dev/null && alias bat='batcat'
+command -v batcat &> /dev/null && alias cat='batcat'

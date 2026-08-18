@@ -134,7 +134,3 @@ ai-models() {
         ollama list 2>/dev/null || print "  (server not running)"
     fi
 }
-
-# Continuous-Claude OPC directory (for skills to locate scripts)
-[[ -d "${HOME}/Projects/Continuous-Claude-v3/opc" ]] && \
-    export CLAUDE_OPC_DIR="${HOME}/Projects/Continuous-Claude-v3/opc"

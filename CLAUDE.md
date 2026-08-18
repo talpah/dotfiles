@@ -37,6 +37,7 @@ zsh -n zsh/30-tools.zsh        # single zsh module parse check
 | `20-aliases.zsh` | aliases, incl. modern command replacements | 00 (tools must be on PATH) |
 | `30-tools.zsh` | fzf, zoxide, atuin, direnv, mise, completions, keybindings | 00 |
 | `40-ai.zsh` | Claude Code helpers, local-model routing | 00 |
+| `50-motd.zsh` | once-a-day cool-apps reminder | 20 (uses `command cat`) |
 
 **Ordering is load-bearing.** `00-path.zsh` runs brew shellenv first because `fd`, `rg`, `fzf`, `zoxide`, `eza` and `delta` all live in Homebrew — every later `command -v` probe depends on it. Modules load *after* `source $ZSH/oh-my-zsh.sh`, so repo aliases deliberately win over oh-my-zsh's (this is how `ls`→eza beats omz's `ls --color=tty`, and how `duf` gets unaliased from `common-aliases`).
 

@@ -138,3 +138,7 @@ ai-models() {
 # Continuous-Claude OPC directory (for skills to locate scripts)
 [[ -d "${HOME}/Projects/Continuous-Claude-v3/opc" ]] && \
     export CLAUDE_OPC_DIR="${HOME}/Projects/Continuous-Claude-v3/opc"
+
+# Root for platform-flows plugin hooks
+[[ -d "${HOME}/.claude/plugin-hooks/platform-flows-root" ]] && \
+    export CLAUDE_PLUGIN_ROOT="${HOME}/.claude/plugin-hooks/platform-flows-root"

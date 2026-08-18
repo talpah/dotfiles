@@ -22,6 +22,7 @@ zsh/10-env.zsh      environment, pager, locale
 zsh/20-aliases.zsh  aliases, including modern command replacements
 zsh/30-tools.zsh    fzf, zoxide, atuin, direnv, completions, keybindings
 zsh/40-ai.zsh       Claude Code and local-model helpers
+zsh/50-motd.zsh     once-a-day cool-apps reminder
 zfunc/              static zsh completions (make completions)
 config/ghostty/     terminal emulator config
 .gitconfig          included into ~/.gitconfig, never symlinked over it

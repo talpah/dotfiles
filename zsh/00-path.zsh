@@ -31,7 +31,10 @@ add_to_path /usr/sbin
 add_to_path /sbin
 
 # Language and tool managers
-add_to_path "${HOME}/.bun/bin"
+if [[ -d "${HOME}/.bun" ]]; then
+    export BUN_INSTALL="${HOME}/.bun"   # bun reads this for self-update and global installs
+    add_to_path "${BUN_INSTALL}/bin"
+fi
 add_to_path "${HOME}/go/bin"
 
 # AI tooling

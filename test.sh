@@ -70,6 +70,10 @@ run_test ".gitconfig parses" "git config --list --file .gitconfig"
 run_test "ghostty config non-empty" "[[ -s config/ghostty/config ]]"
 run_test ".zshrc loads modules" "grep -q 'zsh/\*\.zsh' .zshrc"
 run_test ".zshrc sources local overrides" "grep -q 'zshrc.local' .zshrc"
+# `make update` scopes brew upgrade via this flag; it must work with no
+# apt, no sudo and no brew, so keep it answered before OS detection.
+run_test "install_goodies.sh --list works" "./bin/install_goodies.sh --list | grep -q eza"
+run_test "--list emits one formula per line" "[[ \$(./bin/install_goodies.sh --list | wc -l) -ge 15 ]]"
 # /home/linuxbrew is a fixed system path, not a user home - exclude it
 run_test "no hardcoded user home paths" \
     "! grep -rn '/home/' zsh/ .zshrc | grep -v '/home/linuxbrew'"

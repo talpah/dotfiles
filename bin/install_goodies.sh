@@ -11,6 +11,38 @@ log_info() { echo -e "${GREEN}[INFO]${NC} $*"; }
 log_warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $*" >&2; }
 
+# Single source of truth for the Homebrew toolchain. Homebrew rather than apt:
+# consistent binary names (fd not fdfind, bat not batcat), current versions,
+# and no extra third-party apt repos to maintain.
+readonly BREW_TOOLS=(
+    eza          # ls
+    fd           # find
+    ripgrep      # grep
+    zoxide       # cd
+    fzf          # fuzzy finder
+    git-delta    # git diff pager
+    atuin        # shell history
+    lazygit      # git TUI
+    lazydocker   # docker TUI
+    dust         # du
+    duf          # df
+    procs        # ps
+    sd           # sed
+    jq yq        # JSON / YAML
+    difftastic   # structural diff
+    hyperfine    # benchmarking
+    ast-grep     # structural code search
+    tldr         # concise man pages
+)
+
+# `install_goodies.sh --list` prints the formulae and exits, so the Makefile
+# can scope `brew upgrade` to them instead of upgrading every formula on the
+# machine. Answered before OS detection so it works anywhere.
+if [[ "${1:-}" == "--list" ]]; then
+    printf '%s\n' "${BREW_TOOLS[@]}"
+    exit 0
+fi
+
 # Detect OS
 if [[ ! -f /etc/os-release ]]; then
     log_error "Cannot detect OS. /etc/os-release not found."
@@ -96,45 +128,38 @@ fi
 # ---------------------------------------------------------------------------
 # Modern CLI tools via Homebrew
 # ---------------------------------------------------------------------------
-# Homebrew rather than apt: consistent binary names (fd not fdfind, bat not
-# batcat), current versions, and no extra third-party apt repos to maintain.
-readonly BREW_TOOLS=(
-    eza          # ls
-    fd           # find
-    ripgrep      # grep
-    zoxide       # cd
-    fzf          # fuzzy finder
-    git-delta    # git diff pager
-    atuin        # shell history
-    lazygit      # git TUI
-    lazydocker   # docker TUI
-    dust         # du
-    duf          # df
-    procs        # ps
-    sd           # sed
-    jq yq        # JSON / YAML
-    difftastic   # structural diff
-    hyperfine    # benchmarking
-    ast-grep     # structural code search
-    tldr         # concise man pages
-)
-
 if ! command -v brew &> /dev/null; then
     log_warn "Homebrew not found. Install it to get the modern CLI tools:"
     # shellcheck disable=SC2016  # literal command for the user to copy, not expanded here
     log_warn '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
     log_warn "Then re-run this script."
 else
-    log_info "Installing modern CLI tools via Homebrew..."
+    missing=()
     for tool in "${BREW_TOOLS[@]}"; do
         if brew list --formula "${tool}" &> /dev/null; then
             log_info "  ${tool} already installed"
-        elif brew install "${tool}"; then
-            log_info "  ✓ ${tool}"
         else
-            log_warn "  ✗ ${tool} failed to install"
+            missing+=("${tool}")
         fi
     done
+
+    if [[ ${#missing[@]} -eq 0 ]]; then
+        log_info "All Homebrew tools already installed"
+    else
+        # One batched, non-interactive install: brew prompts per invocation,
+        # so a per-tool loop would ask for confirmation once per formula.
+        log_info "Installing ${#missing[@]} tools via Homebrew: ${missing[*]}"
+        brew install --yes "${missing[@]}" || \
+            log_warn "Batch install reported errors; verifying individually"
+
+        for tool in "${missing[@]}"; do
+            if brew list --formula "${tool}" &> /dev/null; then
+                log_info "  ✓ ${tool}"
+            else
+                log_warn "  ✗ ${tool} failed to install"
+            fi
+        done
+    fi
 fi
 
 # Verify critical packages

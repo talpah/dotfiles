@@ -35,8 +35,10 @@ update:
 		fi; \
 	done
 	@if command -v brew >/dev/null 2>&1; then \
-		echo "Updating Homebrew tools..."; \
-		brew update --quiet && brew upgrade --quiet; \
+		echo "Updating Homebrew tools managed by this repo..."; \
+		brew update --quiet; \
+		brew upgrade --quiet $$(./bin/install_goodies.sh --list | tr '\n' ' ') || true; \
+		echo "  (other formulae left alone; 'brew upgrade' upgrades everything)"; \
 	fi
 	@echo "Update complete!"
 

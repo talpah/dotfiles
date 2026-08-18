@@ -1,4 +1,4 @@
-.PHONY: help install goodies uninstall update completions test lint clean
+.PHONY: help install goodies uninstall update completions test test-docker lint clean
 
 help:
 	@echo "Dotfiles Management"
@@ -10,6 +10,7 @@ help:
 	@echo "  make update       - Update oh-my-zsh, powerlevel10k and zsh plugins"
 	@echo "  make completions  - Regenerate static zsh completions into zfunc/"
 	@echo "  make test         - Run the full test suite"
+	@echo "  make test-docker  - Install and verify in clean containers (debian/ubuntu/fedora)"
 	@echo "  make lint         - Run shellcheck only"
 	@echo "  make clean        - Clean up backup files (destroys originals)"
 
@@ -53,8 +54,13 @@ completions:
 test:
 	@./test.sh
 
+# Full install verified in throwaway containers. Needs docker and network.
+# Subset: ./test-docker.sh debian ubuntu
+test-docker:
+	@./test-docker.sh
+
 lint:
-	@shellcheck -x install.sh uninstall.sh test.sh bin/*.sh
+	@shellcheck -x install.sh uninstall.sh test.sh test-docker.sh bin/*.sh test/docker/assert.sh
 
 clean:
 	@echo "This permanently deletes pre-install originals in backup/."

@@ -1,0 +1,13 @@
+FROM fedora:41
+# Fedora is NOT supported by the installers (they are apt-only). This image
+# covers two things: that install_essentials.sh refuses cleanly on a non-apt
+# system, and that the zsh config itself is distro-portable. So zsh and git
+# are preinstalled here rather than bootstrapped.
+RUN dnf install -y -q sudo zsh git curl util-linux-user procps-ng && dnf clean all
+RUN useradd -m -s /bin/bash tester && \
+    echo 'tester ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/tester && \
+    sed -i '1i auth sufficient pam_permit.so' /etc/pam.d/chsh
+USER tester
+WORKDIR /home/tester
+COPY --chown=tester:tester dotfiles.tar /tmp/dotfiles.tar
+RUN tar xf /tmp/dotfiles.tar -C /home/tester && mv /home/tester/dotfiles /home/tester/.dotfiles

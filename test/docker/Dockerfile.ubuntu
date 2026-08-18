@@ -1,0 +1,16 @@
+FROM ubuntu:24.04
+# Ubuntu LTS: same apt path, different base.
+# bootstrap those itself.
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -qq && \
+    apt-get install -y -qq --no-install-recommends sudo ca-certificates passwd procps && \
+    rm -rf /var/lib/apt/lists/*
+# Passwordless sudo AND passwordless chsh, so install.sh's shell switch is
+# exercised rather than skipped. pam_permit short-circuits the auth stack.
+RUN useradd -m -s /bin/bash tester && \
+    echo 'tester ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/tester && \
+    sed -i '1i auth sufficient pam_permit.so' /etc/pam.d/chsh
+USER tester
+WORKDIR /home/tester
+COPY --chown=tester:tester dotfiles.tar /tmp/dotfiles.tar
+RUN tar xf /tmp/dotfiles.tar -C /home/tester && mv /home/tester/dotfiles /home/tester/.dotfiles

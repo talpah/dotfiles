@@ -41,9 +41,32 @@ make goodies       # optional packages and Homebrew CLI tools
 make update        # update oh-my-zsh, p10k, zsh plugins, brew formulae
 make completions   # regenerate zfunc/ completions
 make test          # full suite: syntax, zsh parse, config validity, shellcheck
+make test-docker   # install and verify in clean containers (needs docker)
 make lint          # shellcheck only
 make uninstall     # restore backups, remove symlinks
 make clean         # delete backup/ (destroys pre-install originals - prompts)
+```
+
+## Container testing
+
+`make test-docker` installs the working tree into throwaway containers and
+verifies the result. Each container gets passwordless `sudo` **and**
+passwordless `chsh`, so the shell switch is exercised rather than skipped.
+
+| Image | Mode | Covers |
+| ----- | ---- | ------ |
+| `debian:trixie-slim` | full | `install.sh` end to end from a base with no zsh, git or curl |
+| `ubuntu:24.04` | full | same apt path on a different base |
+| `fedora:41` | shell | installers refuse cleanly on a non-apt distro; zsh config still loads |
+
+The installers are apt-only by design, so Fedora asserts graceful refusal
+rather than a working install. The zsh modules themselves are distro-agnostic
+and are verified on all three.
+
+```bash
+./test-docker.sh                 # everything
+./test-docker.sh debian ubuntu   # a subset
+KEEP=1 ./test-docker.sh debian   # keep the container to poke at
 ```
 
 ## Modern CLI replacements

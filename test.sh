@@ -34,6 +34,8 @@ run_test "install.sh syntax" "bash -n install.sh"
 run_test "uninstall.sh syntax" "bash -n uninstall.sh"
 run_test "install_essentials.sh syntax" "bash -n bin/install_essentials.sh"
 run_test "install_goodies.sh syntax" "bash -n bin/install_goodies.sh"
+run_test "test-docker.sh syntax" "bash -n test-docker.sh"
+run_test "docker assert.sh syntax" "bash -n test/docker/assert.sh"
 
 echo ""
 
@@ -86,6 +88,8 @@ if command -v shellcheck &> /dev/null; then
     run_test "shellcheck uninstall.sh" "shellcheck -x uninstall.sh"
     run_test "shellcheck install_essentials.sh" "shellcheck -x bin/install_essentials.sh"
     run_test "shellcheck install_goodies.sh" "shellcheck -x bin/install_goodies.sh"
+    run_test "shellcheck test-docker.sh" "shellcheck -x test-docker.sh"
+    run_test "shellcheck docker assert.sh" "shellcheck -x test/docker/assert.sh"
     echo ""
 else
     echo -e "${YELLOW}[SKIP]${NC} shellcheck not installed (apt install shellcheck)"

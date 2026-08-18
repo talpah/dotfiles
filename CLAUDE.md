@@ -22,7 +22,18 @@ shellcheck -x install.sh       # single check; -x is required (install.sh source
 zsh -n zsh/30-tools.zsh        # single zsh module parse check
 ```
 
-`make test` is the only test suite and must be green before committing.
+`make test` runs locally and must be green before committing. `make test-docker`
+additionally installs the tree into clean containers — use it for anything
+touching `install.sh`, the module load order, or a tool guard, since those
+failure modes only appear on a machine that lacks the tools.
+
+Container tests live in `test/docker/`: one `Dockerfile.<distro>` per image and
+`assert.sh`, which runs inside. `MODE=full` runs `install.sh` (apt distros);
+`MODE=shell` asserts the installers refuse cleanly and then verifies the zsh
+config in isolation (non-apt distros). Containers get passwordless `chsh` via a
+`pam_permit` line, without which the shell switch silently no-ops and goes
+untested. Note `test-docker.sh` lives at the top level, not in `bin/` —
+`install.sh` symlinks everything in `bin/` into `~/bin`.
 
 ## Architecture
 

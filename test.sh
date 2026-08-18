@@ -37,6 +37,19 @@ run_test "install_goodies.sh syntax" "bash -n bin/install_goodies.sh"
 
 echo ""
 
+# Zsh syntax tests
+if command -v zsh &> /dev/null; then
+    echo "=== Zsh Syntax ==="
+    run_test ".zshrc syntax" "zsh -n .zshrc"
+    for module in zsh/*.zsh; do
+        run_test "$(basename "${module}") syntax" "zsh -n '${module}'"
+    done
+    echo ""
+else
+    echo -e "${YELLOW}[SKIP]${NC} zsh not installed"
+    echo ""
+fi
+
 # File existence tests
 echo "=== File Existence ==="
 run_test ".zshrc exists" "[[ -f .zshrc ]]"
@@ -44,6 +57,20 @@ run_test ".gitconfig exists" "[[ -f .gitconfig ]]"
 run_test "backup directory exists" "[[ -d backup ]]"
 run_test "config/ghostty exists" "[[ -d config/ghostty ]]"
 run_test "zfunc directory exists" "[[ -d zfunc ]]"
+run_test "zsh module directory exists" "[[ -d zsh ]]"
+run_test "zsh modules present" "compgen -G 'zsh/*.zsh' > /dev/null"
+
+echo ""
+
+# Config validity
+echo "=== Config Validity ==="
+run_test ".gitconfig parses" "git config --list --file .gitconfig"
+run_test "ghostty config non-empty" "[[ -s config/ghostty/config ]]"
+run_test ".zshrc loads modules" "grep -q 'zsh/\*\.zsh' .zshrc"
+run_test ".zshrc sources local overrides" "grep -q 'zshrc.local' .zshrc"
+# /home/linuxbrew is a fixed system path, not a user home - exclude it
+run_test "no hardcoded user home paths" \
+    "! grep -rn '/home/' zsh/ .zshrc | grep -v '/home/linuxbrew'"
 
 echo ""
 

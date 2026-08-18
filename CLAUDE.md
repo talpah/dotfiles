@@ -52,10 +52,13 @@ not in `bin/` — `install.sh` symlinks everything in `bin/` into `~/bin`.
 
 **Ordering is load-bearing.** `00-path.zsh` runs brew shellenv first because `fd`, `rg`, `fzf`, `zoxide`, `eza` and `delta` all live in Homebrew — every later `command -v` probe depends on it. Modules load *after* `source $ZSH/oh-my-zsh.sh`, so repo aliases deliberately win over oh-my-zsh's (this is how `ls`→eza beats omz's `ls --color=tty`, and how `duf` gets unaliased from `common-aliases`).
 
-Two things must stay in `.zshrc` itself and cannot move into a module:
+Three things must stay in `.zshrc` itself and cannot move into a module, because modules load *after* `source $ZSH/oh-my-zsh.sh` and oh-my-zsh runs `compinit` while being sourced:
 
-- **`fpath+=zfunc`** — oh-my-zsh runs `compinit` during its own sourcing, so custom completion dirs must join `fpath` before that line.
+- **`brew shellenv`** — it prepends Homebrew's `share/zsh/site-functions` to `fpath`. Run it from a module and every brew-provided completion (atuin, eza, delta, fd, rg, ast-grep, procs…) is silently missing on a fresh login. `test.sh` asserts it precedes the oh-my-zsh source line and that no module re-runs it.
+- **`fpath+=zfunc`** — same reason: custom completion dirs must join `fpath` before `compinit`.
 - **p10k instant prompt** — must be the first thing that could produce output.
+
+Note the ordering subtlety: an inherited `FPATH` environment variable masks this bug, because a child shell starts with `fpath` already populated. It only reproduces on a genuinely fresh login, or by scrubbing `FPATH` and `HOMEBREW_*` from the environment first.
 
 `zsh-syntax-highlighting` must remain last in the `plugins` array; it wraps widgets defined by everything before it.
 

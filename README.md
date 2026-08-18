@@ -71,16 +71,98 @@ the tool keeps the original command. Escape any alias with a backslash: `\ls`.
 
 | Command | Becomes | Notes |
 | ------- | ------- | ----- |
-| `ls` | [`eza`](https://github.com/eza-community/eza) | `l`, `ll`, `la`, `lt` (tree), `lm` (by mtime) |
-| `cd` | [`zoxide`](https://github.com/ajeetdsouza/zoxide) | frecency-ranked; `cdi` picks interactively |
-| `cat` | [`bat`](https://github.com/sharkdp/bat) | `catp` for unstyled output |
-| `grep` | [`ripgrep`](https://github.com/BurntSushi/ripgrep) | |
-| `find` | [`fd`](https://github.com/sharkdp/fd) | different syntax — `\find` for the original |
-| `rm` | [`trash-put`](https://github.com/andreafrancia/trash-cli) | `rml`, `rmr`, `rme` to list / restore / empty |
-| `du` | [`dust`](https://github.com/bootandy/dust) | `dus` keeps the old `du -sh *` |
-| `df` | [`duf`](https://github.com/muesli/duf) | |
-| `ps` | [`procs`](https://github.com/dalance/procs) | |
-| `top` | [`btop`](https://github.com/aristocratos/btop) | |
+| `ls` | `eza` | `l`, `ll`, `la`, `lt` (tree), `lm` (by mtime) |
+| `cd` | `zoxide` | frecency-ranked; `cdi` picks interactively |
+| `cat` | `bat` | `catp` for unstyled output |
+| `grep` | `ripgrep` | |
+| `find` | `fd` | different syntax — `\find` for the original |
+| `rm` | `trash-put` | `rml`, `rmr`, `rme` to list / restore / empty |
+| `du` | `dust` | `dus` keeps the old `du -sh *` |
+| `df` | `duf` | |
+| `ps` | `procs` | |
+| `top` | `btop` | |
+
+## 🧰 Toolchain
+
+The tools these dotfiles install and configure.
+
+**Shell and prompt**
+
+| | |
+| --- | --- |
+| [zsh](https://www.zsh.org/) | the shell itself |
+| [oh-my-zsh](https://ohmyz.sh/) | plugin and theme framework |
+| [powerlevel10k](https://github.com/romkatv/powerlevel10k) | prompt, with instant-prompt support |
+| [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) | inline suggestions from history |
+| [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) | highlights the command line as you type |
+| [powerline fonts](https://github.com/powerline/powerline) | glyphs the prompt needs |
+
+**Navigation and search**
+
+| | |
+| --- | --- |
+| [eza](https://eza.rocks) | modern, maintained replacement for `ls` |
+| [zoxide](https://github.com/ajeetdsouza/zoxide) | navigate the filesystem by frecency |
+| [fzf](https://junegunn.github.io/fzf/) | command-line fuzzy finder |
+| [fd](https://github.com/sharkdp/fd) | simple, fast, user-friendly alternative to `find` |
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | fast recursive search that respects `.gitignore` |
+| [tree](http://oldmanprogrammer.net/source.php?dir=projects/tree) | indented directory tree |
+
+**Viewing and inspection**
+
+| | |
+| --- | --- |
+| [bat](https://github.com/sharkdp/bat) | `cat` with syntax highlighting and git integration |
+| [dust](https://github.com/bootandy/dust) | more intuitive `du` |
+| [duf](https://github.com/muesli/duf) | better `df` |
+| [procs](https://github.com/dalance/procs) | modern replacement for `ps` |
+| [btop](https://github.com/aristocratos/btop) | resource monitor |
+| [mc](https://www.midnight-commander.org) | Midnight Commander file manager |
+
+**Git and diff**
+
+| | |
+| --- | --- |
+| [git-delta](https://dandavison.github.io/delta/) | syntax-highlighting pager for git and diff |
+| [difftastic](https://difftastic.wilfred.me.uk/) | diff that understands syntax — `git dft` |
+| [lazygit](https://github.com/jesseduffield/lazygit/) | terminal UI for git |
+| [gh](https://github.com/cli/cli) | GitHub CLI |
+| [glab](https://gitlab.com/gitlab-org/cli) | GitLab CLI |
+
+**Data and text**
+
+| | |
+| --- | --- |
+| [jq](https://jqlang.github.io/jq/) | command-line JSON processor |
+| [yq](https://github.com/mikefarah/yq) | YAML, JSON, XML, CSV and properties |
+| [sd](https://github.com/chmln/sd) | intuitive find and replace |
+| [ast-grep](https://ast-grep.github.io/) | structural code search, linting, rewriting |
+
+**History, safety and docs**
+
+| | |
+| --- | --- |
+| [atuin](https://atuin.sh/) | searchable, syncable shell history |
+| [trash-cli](https://github.com/andreafrancia/trash-cli) | send files to the trash instead of deleting |
+| [tldr](https://tldr.sh/) | simplified, community-driven man pages |
+
+**Dev and ops**
+
+| | |
+| --- | --- |
+| [Docker](https://www.docker.com) | containers, with the compose v2 plugin |
+| [lazydocker](https://github.com/jesseduffield/lazydocker) | terminal UI for docker |
+| [shellcheck](https://www.shellcheck.net/) | shell script linter — used by `make lint` |
+| [hyperfine](https://github.com/sharkdp/hyperfine) | command-line benchmarking |
+| [tilix](https://gnunn1.github.io/tilix-web/) | tiling terminal emulator |
+| [vim](https://www.vim.org/) | `$EDITOR` |
+
+> [!NOTE]
+> **atuin needs a one-time import.** It starts with an empty database, so your
+> existing shell history stays invisible to <kbd>Ctrl</kbd>+<kbd>R</kbd> until you run:
+> ```bash
+> atuin import auto
+> ```
 
 ## ⌨️ Shell integration
 

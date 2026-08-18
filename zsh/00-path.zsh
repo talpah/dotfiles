@@ -22,12 +22,9 @@ add_to_path() {
     esac
 }
 
-# Homebrew (Linuxbrew) - first, it provides fd/rg/fzf/zoxide/eza/delta
-if [[ -d /home/linuxbrew/.linuxbrew ]]; then
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-elif [[ -d "${HOME}/.linuxbrew" ]]; then
-    eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"
-fi
+# Homebrew is initialised in .zshrc, before oh-my-zsh runs compinit, so that
+# brew-provided completions land on fpath in time. By the time this module
+# loads, fd/rg/fzf/zoxide/eza/delta are already on PATH.
 
 # User binaries
 add_to_path "${HOME}/bin"

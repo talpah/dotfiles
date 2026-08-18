@@ -70,6 +70,30 @@ run_test ".gitconfig parses" "git config --list --file .gitconfig"
 run_test "ghostty config non-empty" "[[ -s config/ghostty/config ]]"
 run_test ".zshrc loads modules" "grep -q 'zsh/\*\.zsh' .zshrc"
 run_test ".zshrc sources local overrides" "grep -q 'zshrc.local' .zshrc"
+# brew shellenv prepends completions to fpath; oh-my-zsh runs compinit while
+# being sourced, so anything later is invisible to the completion system.
+# Match the eval and source statements themselves - an earlier version keyed
+# off a comment mentioning "brew shellenv" and an oh-my-zsh pattern that never
+# matched, which made the assertion impossible to fail.
+# shellcheck disable=SC2317  # invoked indirectly through run_test's eval
+line_of() { grep -nE "$1" "$2" | head -1 | cut -d: -f1; }
+
+# shellcheck disable=SC2317  # invoked indirectly through run_test's eval
+brew_precedes_omz() {
+    local brew omz
+    brew="$(line_of '^[[:space:]]*eval .*brew shellenv' .zshrc)"
+    omz="$(line_of '^[[:space:]]*source .*oh-my-zsh\.sh' .zshrc)"
+    # Fail loudly rather than silently passing if either line disappears
+    [[ -n "${brew}" && -n "${omz}" ]] || return 1
+    (( brew < omz ))
+}
+
+run_test "brew init precedes oh-my-zsh" "brew_precedes_omz"
+run_test "no brew shellenv in modules"  "! grep -rq 'brew shellenv' zsh/"
+# `make update` scopes brew upgrade via this flag; it must work with no
+# apt, no sudo and no brew, so keep it answered before OS detection.
+run_test "install_goodies.sh --list works" "./bin/install_goodies.sh --list | grep -q eza"
+run_test "--list emits one formula per line" "[[ \$(./bin/install_goodies.sh --list | wc -l) -ge 15 ]]"
 # /home/linuxbrew is a fixed system path, not a user home - exclude it
 run_test "no hardcoded user home paths" \
     "! grep -rn '/home/' zsh/ .zshrc | grep -v '/home/linuxbrew'"

@@ -1,8 +1,17 @@
 # ============================================================================
 # PATH construction
 # ============================================================================
-# Loaded first: later modules probe for tools with `command -v`, so everything
+# Loaded first: later modules probe for tools with `has`, so everything
 # must already be reachable by the time 30-tools.zsh runs.
+
+# has <cmd> - true only when <cmd> is a real external binary.
+# Do NOT use `command -v` for this: in zsh it also matches aliases and
+# functions, and oh-my-zsh's common-aliases plugin defines `fd` and `duf`
+# as fallback aliases exactly when those binaries are absent. Probing with
+# `command -v` therefore reports them as installed and produces aliases
+# pointing at commands that do not exist.
+zmodload -F zsh/parameter p:commands 2>/dev/null
+has() { (( ${+commands[$1]} )) }
 
 # Add to PATH only if the directory exists and is not already present
 add_to_path() {

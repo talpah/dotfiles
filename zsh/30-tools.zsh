@@ -7,7 +7,7 @@
 # ---------------------------------------------------------------------------
 # fzf - fuzzy finder. Ctrl+T files, Ctrl+R history, Alt+C cd
 # ---------------------------------------------------------------------------
-if command -v fzf &> /dev/null; then
+if has fzf; then
     # fzf 0.48+ ships its own shell integration; older versions need the files
     if fzf --zsh &> /dev/null; then
         eval "$(fzf --zsh)"
@@ -19,7 +19,7 @@ if command -v fzf &> /dev/null; then
     fi
 
     # Respect .gitignore and skip .git when listing candidates
-    if command -v fd &> /dev/null; then
+    if has fd; then
         export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
         export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
         export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
@@ -28,12 +28,12 @@ if command -v fzf &> /dev/null; then
     export FZF_DEFAULT_OPTS='--height 60% --layout=reverse --border=rounded --info=inline'
 
     # Preview file contents on Ctrl+T, directory trees on Alt+C
-    if command -v bat &> /dev/null; then
+    if has bat; then
         export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
-    elif command -v batcat &> /dev/null; then
+    elif has batcat; then
         export FZF_CTRL_T_OPTS="--preview 'batcat --color=always --style=numbers --line-range=:200 {}'"
     fi
-    if command -v eza &> /dev/null; then
+    if has eza; then
         export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --color=always {}'"
     fi
 fi
@@ -41,7 +41,7 @@ fi
 # ---------------------------------------------------------------------------
 # zoxide - frecency-ranked cd. Replaces cd; `cdi` opens the interactive picker.
 # ---------------------------------------------------------------------------
-if command -v zoxide &> /dev/null; then
+if has zoxide; then
     eval "$(zoxide init zsh --cmd cd)"
 fi
 
@@ -49,28 +49,28 @@ fi
 # atuin - searchable, synced shell history (takes over Ctrl+R from fzf).
 # Up-arrow stays with zsh's own history so muscle memory is unaffected.
 # ---------------------------------------------------------------------------
-if command -v atuin &> /dev/null; then
+if has atuin; then
     eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
 # ---------------------------------------------------------------------------
 # direnv - per-directory environments
 # ---------------------------------------------------------------------------
-command -v direnv &> /dev/null && eval "$(direnv hook zsh)"
+has direnv && eval "$(direnv hook zsh)"
 
 # ---------------------------------------------------------------------------
 # mise - runtime version manager
 # ---------------------------------------------------------------------------
-command -v mise &> /dev/null && eval "$(mise activate zsh)"
+has mise && eval "$(mise activate zsh)"
 
 # ---------------------------------------------------------------------------
 # Completions
 # ---------------------------------------------------------------------------
 # Static completions generated into zfunc/ by `make completions`; they are on
 # fpath already (see .zshrc). Tools that only offer dynamic completion go here.
-[[ -x "$(command -v uv)"   ]] && eval "$(uv generate-shell-completion zsh)"
-[[ -x "$(command -v gh)"   ]] && eval "$(gh completion -s zsh)"
-[[ -x "$(command -v glab)" ]] && eval "$(glab completion -s zsh)"
+has uv && eval "$(uv generate-shell-completion zsh)"
+has gh && eval "$(gh completion -s zsh)"
+has glab && eval "$(glab completion -s zsh)"
 
 # Third-party completion files, sourced only when present
 [[ -f "${HOME}/.openclaw/completions/openclaw.zsh" ]] && \

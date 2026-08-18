@@ -72,6 +72,11 @@ run_test ".zshrc sources local overrides" "grep -q 'zshrc.local' .zshrc"
 run_test "no hardcoded user home paths" \
     "! grep -rn '/home/' zsh/ .zshrc | grep -v '/home/linuxbrew'"
 
+# `command -v` matches aliases and functions in zsh, so tool probes must use
+# the `has` helper (binary-only). Comments explaining this are exempt.
+run_test "tool probes use has(), not command -v" \
+    "! grep -rn 'command -v' zsh/ | grep -v '^zsh/00-path.zsh:[0-9]*:#'"
+
 echo ""
 
 # Shellcheck tests (if available)

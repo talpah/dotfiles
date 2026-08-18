@@ -5,7 +5,7 @@
 # ---------------------------------------------------------------------------
 # Claude Code
 # ---------------------------------------------------------------------------
-if command -v claude &> /dev/null; then
+if has claude; then
     alias cc='claude'
     alias ccy='claude --dangerously-skip-permissions'
     alias ccr='claude --resume'
@@ -114,9 +114,9 @@ fi
 # ---------------------------------------------------------------------------
 # Other agent CLIs
 # ---------------------------------------------------------------------------
-command -v openclaw &> /dev/null && alias oc='openclaw'
-command -v crush    &> /dev/null && alias cr='crush'
-command -v opencode &> /dev/null && alias ocd='opencode'
+has openclaw && alias oc='openclaw'
+has crush && alias cr='crush'
+has opencode && alias ocd='opencode'
 
 # ---------------------------------------------------------------------------
 # Local model servers
@@ -125,11 +125,11 @@ export OLLAMA_API_KEY="${OLLAMA_API_KEY:-ollama-local}"
 
 # ai-models - list what the local backends currently serve
 ai-models() {
-    if command -v lms &> /dev/null; then
+    if has lms; then
         print -P "%F{cyan}LM Studio%f"
         lms ls 2>/dev/null || print "  (server not running)"
     fi
-    if command -v ollama &> /dev/null; then
+    if has ollama; then
         print -P "%F{cyan}Ollama%f"
         ollama list 2>/dev/null || print "  (server not running)"
     fi

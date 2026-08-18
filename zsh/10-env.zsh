@@ -7,11 +7,11 @@ export EDITOR=vim
 export VISUAL="${EDITOR}"
 
 # Pager: bat when available, plain less otherwise
-if command -v bat &> /dev/null; then
+if has bat; then
     export PAGER='bat --plain --paging=always'
     export MANPAGER="sh -c 'col -bx | bat --language man --plain --paging=always'"
     export MANROFFOPT='-c'
-elif command -v batcat &> /dev/null; then
+elif has batcat; then
     export PAGER='batcat --plain --paging=always'
     export MANPAGER="sh -c 'col -bx | batcat --language man --plain --paging=always'"
     export MANROFFOPT='-c'

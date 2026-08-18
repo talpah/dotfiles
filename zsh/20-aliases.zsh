@@ -8,7 +8,7 @@
 # ---------------------------------------------------------------------------
 # Listing - eza
 # ---------------------------------------------------------------------------
-if command -v eza &> /dev/null; then
+if has eza; then
     alias ls='eza --group-directories-first --icons=auto'
     alias l='eza -lah --group-directories-first --icons=auto --git'
     alias ll='eza -lh  --group-directories-first --icons=auto --git'
@@ -26,10 +26,10 @@ fi
 # ---------------------------------------------------------------------------
 # Viewing - bat (packaged as batcat on Debian/Ubuntu)
 # ---------------------------------------------------------------------------
-if command -v bat &> /dev/null; then
+if has bat; then
     alias cat='bat --paging=never'
     alias catp='bat --plain --paging=never'
-elif command -v batcat &> /dev/null; then
+elif has batcat; then
     alias bat='batcat'
     alias cat='batcat --paging=never'
     alias catp='batcat --plain --paging=never'
@@ -38,10 +38,10 @@ fi
 # ---------------------------------------------------------------------------
 # Search - ripgrep and fd
 # ---------------------------------------------------------------------------
-command -v rg &> /dev/null && alias grep='rg'
-if command -v fd &> /dev/null; then
+has rg && alias grep='rg'
+if has fd; then
     alias find='fd'
-elif command -v fdfind &> /dev/null; then
+elif has fdfind; then
     alias fd='fdfind'
     alias find='fdfind'
 fi
@@ -49,7 +49,7 @@ fi
 # ---------------------------------------------------------------------------
 # Deletion - trash-cli. `\rm` still reaches the real thing.
 # ---------------------------------------------------------------------------
-if command -v trash-put &> /dev/null; then
+if has trash-put; then
     alias rm='trash-put'
     alias rme='trash-empty'
     alias rml='trash-list'
@@ -59,14 +59,14 @@ fi
 # ---------------------------------------------------------------------------
 # Disk and process inspection
 # ---------------------------------------------------------------------------
-command -v dust  &> /dev/null && alias du='dust'
-command -v duf   &> /dev/null && alias df='duf'
-command -v procs &> /dev/null && alias ps='procs'
-command -v btop  &> /dev/null && alias top='btop'
+has dust && alias du='dust'
+has duf && alias df='duf'
+has procs && alias ps='procs'
+has btop && alias top='btop'
 
 # common-aliases (oh-my-zsh) defines `duf` as `du -sh *`; drop it so the real
 # duf binary wins, and keep the original behaviour under a different name.
-if command -v duf &> /dev/null; then
+if has duf; then
     unalias duf 2>/dev/null
     alias dus='du -sh *'
 fi
@@ -75,7 +75,7 @@ fi
 # Git
 # ---------------------------------------------------------------------------
 alias mr='glab mr create -t "$(git rev-parse --abbrev-ref HEAD)" -d "Resolve $(git rev-parse --abbrev-ref HEAD)"'
-command -v lazygit &> /dev/null && alias lg='lazygit'
+has lazygit && alias lg='lazygit'
 alias gwl='git worktree list'
 alias gwr='git worktree remove'
 
@@ -87,12 +87,12 @@ alias dcu='docker compose up -d'
 alias dcd='docker compose down'
 alias dcl='docker compose logs -f --tail=100'
 alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
-command -v lazydocker &> /dev/null && alias ld='lazydocker'
+has lazydocker && alias ld='lazydocker'
 
 # ---------------------------------------------------------------------------
 # Python - uv only, per project convention
 # ---------------------------------------------------------------------------
-if command -v uv &> /dev/null; then
+if has uv; then
     alias uvr='uv run'
     alias uvs='uv sync'
     alias uvi='uv pip install'

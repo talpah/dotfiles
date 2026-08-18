@@ -70,6 +70,12 @@ run_test ".gitconfig parses" "git config --list --file .gitconfig"
 run_test "ghostty config non-empty" "[[ -s config/ghostty/config ]]"
 run_test ".zshrc loads modules" "grep -q 'zsh/\*\.zsh' .zshrc"
 run_test ".zshrc sources local overrides" "grep -q 'zshrc.local' .zshrc"
+# brew shellenv prepends completions to fpath; oh-my-zsh runs compinit while
+# being sourced, so anything later is invisible to the completion system.
+run_test "brew init precedes oh-my-zsh" \
+    "[[ \$(grep -n 'brew shellenv' .zshrc | head -1 | cut -d: -f1) -lt \
+        \$(grep -n 'source .\$ZSH/oh-my-zsh.sh' .zshrc | cut -d: -f1) ]]"
+run_test "no brew shellenv in modules" "! grep -rq 'brew shellenv' zsh/"
 # `make update` scopes brew upgrade via this flag; it must work with no
 # apt, no sudo and no brew, so keep it answered before OS detection.
 run_test "install_goodies.sh --list works" "./bin/install_goodies.sh --list | grep -q eza"

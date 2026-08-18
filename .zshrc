@@ -26,6 +26,16 @@ COMPLETION_WAITING_DOTS="true"
 ZSH_DISABLE_COMPFIX=true
 DISABLE_MAGIC_FUNCTIONS=true       # faster paste in large buffers
 
+# Homebrew must be initialised here, not in zsh/00-path.zsh. `brew shellenv`
+# prepends its completions to fpath, and oh-my-zsh runs compinit while it is
+# being sourced below - anything joining fpath after that is invisible to the
+# completion system (atuin, eza, delta et al ship completions this way).
+if [[ -d /home/linuxbrew/.linuxbrew ]]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [[ -d "${HOME}/.linuxbrew" ]]; then
+    eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"
+fi
+
 # Custom completions must join fpath before oh-my-zsh runs compinit
 fpath=("${DOTFILES}/zfunc" $fpath)
 

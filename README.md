@@ -1,107 +1,116 @@
 # dotfiles
 
-Modern development environment setup with Oh-my-zsh, [Powerlevel10k](https://github.com/romkatv/powerlevel10k) theme, and [Powerline](https://github.com/powerline/fonts) fonts.
+Modern development environment: zsh + [Oh My Zsh](https://ohmyz.sh/) with the
+[Powerlevel10k](https://github.com/romkatv/powerlevel10k) theme, a Rust-based CLI
+toolchain, and shell integration for AI coding agents.
 
 ## Quick Start
 
 ```bash
-# Via git (recommended)
 git clone https://github.com/talpah/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-make install
-
-# Install optional goodies
-make goodies
+make install     # essentials, symlinks, shell switch
+make goodies     # Docker, gh, glab, and the modern CLI tools
 ```
 
-## What's Included
+## Layout
 
-### Essential packages (`make install`):
-- curl, tree, git, zsh
-- oh-my-zsh with powerlevel10k theme
-- Powerline fonts
-
-### Configuration files:
-- `.zshrc` - Modern zsh config with history, completions, and PATH management
-- `.gitconfig` - Git aliases and modern settings (zdiff3, histogram diff, etc.)
-- `config/ghostty/` - Ghostty terminal emulator config
-
-### Optional goodies (`make goodies`):
-- **System utilities**: tilix, mc, btop, vim, build-essential
-- **batcat** - Syntax-highlighted cat replacement
-- **Docker** - Container runtime with compose plugin
-- **gh** - GitHub CLI
-- **glab** - GitLab CLI
-
-## Installation
-
-### Via archive
-```bash
-curl -L https://github.com/talpah/dotfiles/archive/master.tar.gz | tar xz
-mv dotfiles-master ~/.dotfiles
-~/.dotfiles/install.sh
+```
+.zshrc              thin loader - sources the modules below
+zsh/00-path.zsh     PATH construction (Homebrew first)
+zsh/10-env.zsh      environment, pager, locale
+zsh/20-aliases.zsh  aliases, including modern command replacements
+zsh/30-tools.zsh    fzf, zoxide, atuin, direnv, completions, keybindings
+zsh/40-ai.zsh       Claude Code and local-model helpers
+zfunc/              static zsh completions (make completions)
+config/ghostty/     terminal emulator config
+.gitconfig          included into ~/.gitconfig, never symlinked over it
+bin/                installers, symlinked into ~/bin
 ```
 
-### Via git (recommended)
-```bash
-git clone https://github.com/talpah/dotfiles.git ~/.dotfiles
-~/.dotfiles/install.sh
-```
+Machine-specific settings go in `~/.zshrc.local`, which is sourced last and is
+never tracked. Anything an installer appends to your shell config belongs there.
 
-## Usage
+## Commands
 
 ```bash
-make help       # Show available commands
-make install    # Install dotfiles
-make goodies    # Install optional packages
-make update     # Update oh-my-zsh and powerlevel10k
-make test       # Run shellcheck tests
-make uninstall  # Uninstall dotfiles
-make clean      # Clean backup directory
+make help          # list targets
+make install       # install dotfiles and essentials
+make goodies       # optional packages and Homebrew CLI tools
+make update        # update oh-my-zsh, p10k, zsh plugins, brew formulae
+make completions   # regenerate zfunc/ completions
+make test          # full suite: syntax, zsh parse, config validity, shellcheck
+make lint          # shellcheck only
+make uninstall     # restore backups, remove symlinks
+make clean         # delete backup/ (destroys pre-install originals - prompts)
 ```
 
-## Uninstall
+## Modern CLI replacements
 
-```bash
-make uninstall
-# or
-~/.dotfiles/uninstall.sh
-```
+Every replacement is guarded on the binary being present, so a machine without
+the tool keeps the original command. Escape any alias with a backslash: `\ls`.
 
-## Features
+| Command | Replaced by | Notes                                  |
+| ------- | ----------- | -------------------------------------- |
+| `ls`    | `eza`       | `l`, `ll`, `la`, `lt` (tree), `lm`     |
+| `cd`    | `zoxide`    | frecency-ranked; `cdi` picks interactively |
+| `cat`   | `bat`       | `catp` for unstyled output             |
+| `grep`  | `ripgrep`   |                                        |
+| `find`  | `fd`        |                                        |
+| `rm`    | `trash-put` | `rml`, `rmr`, `rme` to list/restore/empty |
+| `du`    | `dust`      | `dus` keeps the old `du -sh *`         |
+| `df`    | `duf`       |                                        |
+| `ps`    | `procs`     |                                        |
+| `top`   | `btop`      |                                        |
 
-### Modern ZSH Settings
-- Extended history with timestamps and deduplication
-- Auto-cd (type directory name to cd)
-- Directory stack with auto-pushd
-- Extended globbing
-- Completion caching for faster startup
+## Shell integration
 
-### Zsh Plugins
-- git, docker (includes compose v2)
-- python, pip, ruff
-- common-aliases, sudo, command-not-found
-- ssh-agent, aws, zsh-navigation-tools
+- **fzf** — `Ctrl+T` files (with bat preview), `Ctrl+R` history, `Alt+C` cd
+  (with tree preview). Candidate lists come from `fd`, so `.gitignore` is respected.
+- **atuin** — takes over `Ctrl+R` when installed; up-arrow stays with zsh history.
+- **zsh-autosuggestions** — `Ctrl+Space` accepts the suggestion.
+- **zsh-syntax-highlighting** — loaded last, as it requires.
+- **direnv**, **mise** — activated when present.
 
-### Git Configuration
-- Modern defaults: `init.defaultBranch = main`, `push.default = simple`
-- Better diffs: histogram algorithm, colorMoved
-- Safety: `pull.ff = only`, fsck on transfer
-- Auto-prune on fetch
-- Useful aliases: `sw` (switch), `s` (status -sb), `undo`, `amend`, `gone`
+## AI tooling
 
-### Custom Aliases
-- `mr` - Create GitLab merge request from current branch
-- `bat` - Alias for batcat (Ubuntu naming)
+Claude Code helpers (all no-ops when `claude` is not installed):
 
-### Key Bindings
-- `Ctrl+B` - zsh navigation tools (cd widget)
-- `Ctrl+Y` - zsh navigation tools (kill widget)
+| Alias / function | Does                                                    |
+| ---------------- | ------------------------------------------------------- |
+| `cc`             | `claude`                                                |
+| `ccy`            | `--dangerously-skip-permissions`                        |
+| `ccr` / `ccc`    | resume / continue                                       |
+| `ccp`            | one-shot print mode                                     |
+| `ccw <branch>`   | create a git worktree for the branch and open claude in it |
+| `cx <file\|-> [prompt]` | pipe files or stdin into claude as context        |
+| `gdc [args]`     | send `git diff` to claude for review                    |
+| `cc-local`       | route claude at LM Studio (localhost:1234)              |
+| `cc-ollama`      | route claude at Ollama (localhost:11434)                |
+| `ai-models`      | list models the local backends currently serve          |
+
+`ccw` keeps the main clone clean while an agent works — worktrees land in
+`../<repo>-worktrees/<branch>/`.
+
+## Git configuration
+
+`install.sh` sets `include.path` rather than symlinking, so your own
+`~/.gitconfig` keeps identity and credentials while this file layers on top.
+
+- **delta** as pager, with a `less` fallback when delta is absent
+- `rerere` — remembers conflict resolutions
+- `rebase.updateRefs` — keeps stacked branches in sync
+- `branch.sort = -committerdate`, `column.ui = auto`, `maintenance.auto`
+- `diff.algorithm = histogram`, `colorMoved`, `mnemonicPrefix`
+- Safety: `pull.ff = only`, fsck on transfer and receive
+- Worktree aliases (`wt`, `wtl`, `wta`, `wtr`), difftastic (`dft`, `dfts`),
+  and `wip` / `unwip` for scratch commits
 
 ## Requirements
 
-- Ubuntu or Debian-based Linux
-- sudo access for package installation
+- Debian, Ubuntu, or Pop!_OS
+- sudo access
+- Homebrew for the modern CLI tools (`make goodies` tells you if it is missing)
 
 ## License
 

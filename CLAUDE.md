@@ -73,7 +73,7 @@ Debian/Ubuntu binary-name skew is handled explicitly: `bat` is `batcat`, `fd` is
 DOTFILES="${${(%):-%N}:A:h}"
 ```
 
-`%N` is the sourced file, `:A` resolves the symlink, `:h` takes the directory. The repo therefore works from any location — do not reintroduce hardcoded `~/.dotfiles` or `/home/cosmin` paths. `test.sh` asserts this (the only permitted `/home/` literal is `/home/linuxbrew`, a fixed system path).
+`%N` is the sourced file, `:A` resolves the symlink, `:h` takes the directory. The repo therefore works from any location — do not reintroduce hardcoded `~/.dotfiles` or `/home/<user>` paths. `test.sh` asserts this (the only permitted `/home/` literal is `/home/linuxbrew`, a fixed system path).
 
 ### Install layers
 

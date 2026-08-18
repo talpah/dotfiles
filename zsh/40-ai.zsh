@@ -89,7 +89,7 @@ if has claude; then
             for f in "${files[@]}"; do
                 if [[ "$f" == "-" ]]; then
                     print -- "--- stdin ---"
-                    cat
+                    command cat
                 else
                     print -- "--- ${f} ---"
                     command cat "$f"

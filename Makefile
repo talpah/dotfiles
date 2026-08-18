@@ -10,7 +10,7 @@ help:
 	@echo "  make update       - Update oh-my-zsh, powerlevel10k and zsh plugins"
 	@echo "  make completions  - Regenerate static zsh completions into zfunc/"
 	@echo "  make test         - Run the full test suite"
-	@echo "  make test-docker  - Install and verify in clean containers (debian/ubuntu/fedora)"
+	@echo "  make test-docker  - Install and verify in clean containers (debian/ubuntu)"
 	@echo "  make lint         - Run shellcheck only"
 	@echo "  make clean        - Clean up backup files (destroys originals)"
 

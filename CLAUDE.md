@@ -61,7 +61,9 @@ Two things must stay in `.zshrc` itself and cannot move into a module:
 
 ### Everything is presence-guarded
 
-Every alias and integration is wrapped in `command -v <tool> &> /dev/null`. A machine with none of the modern tools still gets a working shell with the original commands. This is what makes the repo safe to clone onto a bare server. Preserve this pattern when adding anything.
+Every alias and integration is wrapped in `has <tool>` — the helper defined in `00-path.zsh`, which tests `$commands` and therefore matches **only real external binaries**. A machine with none of the modern tools still gets a working shell with the original commands, which is what makes the repo safe to clone onto a bare server. Preserve this pattern when adding anything.
+
+Do **not** guard with `command -v`: in zsh it also matches aliases and functions, and oh-my-zsh's `common-aliases` plugin defines `fd` and `duf` as fallback aliases precisely when those binaries are absent. Probing with `command -v` reported them as installed and aliased `find`/`df` to commands that did not exist. `test.sh` fails if a `command -v` probe reappears in the modules.
 
 Debian/Ubuntu binary-name skew is handled explicitly: `bat` is `batcat`, `fd` is `fdfind`. Blocks probe for both. Homebrew is preferred in `install_goodies.sh` precisely because it avoids this skew.
 

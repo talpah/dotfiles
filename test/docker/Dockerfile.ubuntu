@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
-# Ubuntu LTS: same apt path, different base.
-# bootstrap those itself.
+# Ubuntu LTS: the same apt path on a different base. Deliberately minimal —
+# no zsh, git or curl, so install_essentials.sh must bootstrap them itself.
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -qq && \
     apt-get install -y -qq --no-install-recommends sudo ca-certificates passwd procps && \

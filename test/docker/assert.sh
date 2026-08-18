@@ -29,7 +29,9 @@ echo "=== $(. /etc/os-release && echo "${PRETTY_NAME}") ==="
 
 echo "--- install ---"
 ( cd "${DOTS}" && ./install.sh ) < /dev/null > /tmp/install.log 2>&1
-check "install.sh exits 0"              "[[ \$? -eq 0 ]] || grep -q 'Installation complete' /tmp/install.log"
+install_rc=$?   # must be captured here: $? inside check()'s eval is check()'s own status
+check "install.sh exits 0"              "[[ ${install_rc} -eq 0 ]]"
+check "install log reports completion"  "grep -q 'Installation complete' /tmp/install.log"
 check "no ERROR lines in install log"   "! grep -q '\[ERROR\]' /tmp/install.log"
 
 echo "--- symlinks ---"

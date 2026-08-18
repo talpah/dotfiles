@@ -37,8 +37,16 @@ update:
 	@if command -v brew >/dev/null 2>&1; then \
 		echo "Updating Homebrew tools managed by this repo..."; \
 		brew update --quiet; \
-		brew upgrade --quiet $$(./bin/install_goodies.sh --list | tr '\n' ' ') || true; \
+		installed=""; \
+		for t in $$(./bin/install_goodies.sh --list); do \
+			brew list --formula "$$t" >/dev/null 2>&1 && installed="$$installed $$t"; \
+		done; \
 		echo "  (other formulae left alone; 'brew upgrade' upgrades everything)"; \
+		if [ -n "$$installed" ]; then \
+			brew upgrade --quiet $$installed; \
+		else \
+			echo "  no managed formulae installed yet - run 'make goodies'"; \
+		fi; \
 	fi
 	@echo "Update complete!"
 

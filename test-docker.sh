@@ -2,7 +2,7 @@
 # Install-and-verify the dotfiles inside clean containers.
 #
 #   ./test-docker.sh                 # all distros
-#   ./test-docker.sh debian ubuntu   # a subset
+#   ./test-docker.sh debian          # a subset
 #   KEEP=1 ./test-docker.sh debian   # keep containers for poking at
 #
 # Each container gets passwordless sudo AND passwordless chsh, so the whole
@@ -20,8 +20,8 @@ log()  { echo -e "${BLUE}==>${NC} $*"; }
 warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
 err()  { echo -e "${RED}[ERROR]${NC} $*" >&2; }
 
-# distro : mode  (full = apt-based, install.sh runs; shell = unsupported distro)
-declare -A MODES=( [debian]=full [ubuntu]=full [fedora]=shell )
+# Every image here is apt-based; the installers support nothing else.
+readonly DISTROS=(debian ubuntu)
 
 if ! command -v docker &> /dev/null; then
     err "docker not found"; exit 1
@@ -33,12 +33,12 @@ fi
 
 targets=("$@")
 if [[ ${#targets[@]} -eq 0 ]]; then
-    targets=(debian ubuntu fedora)
+    targets=("${DISTROS[@]}")
 fi
 
 for t in "${targets[@]}"; do
-    if [[ -z "${MODES[$t]:-}" ]]; then
-        err "unknown distro '${t}'. Known: ${!MODES[*]}"; exit 2
+    if [[ ! -f "${DOCKER_DIR}/Dockerfile.${t}" ]]; then
+        err "unknown distro '${t}'. Known: ${DISTROS[*]}"; exit 2
     fi
 done
 
@@ -59,12 +59,11 @@ declare -A RESULT
 overall=0
 
 for distro in "${targets[@]}"; do
-    mode="${MODES[$distro]}"
     image="${TAG_PREFIX}-${distro}"
     container="${TAG_PREFIX}-${distro}-run"
 
     echo ""
-    log "${distro} (mode: ${mode})"
+    log "${distro}"
 
     if ! docker build -q -t "${image}" -f "${DOCKER_DIR}/Dockerfile.${distro}" "${DOCKER_DIR}" > /dev/null; then
         err "build failed for ${distro}"
@@ -72,7 +71,7 @@ for distro in "${targets[@]}"; do
     fi
 
     docker rm -f "${container}" &> /dev/null || true
-    if docker run --name "${container}" -e "MODE=${mode}" "${image}" \
+    if docker run --name "${container}" "${image}" \
             bash /home/tester/.dotfiles/test/docker/assert.sh; then
         RESULT[$distro]="PASS"
     else
@@ -95,9 +94,9 @@ echo "=============================="
 for distro in "${targets[@]}"; do
     r="${RESULT[$distro]:-SKIPPED}"
     if [[ "${r}" == "PASS" ]]; then
-        echo -e " ${GREEN}✓${NC} ${distro} (${MODES[$distro]})"
+        echo -e " ${GREEN}✓${NC} ${distro}"
     else
-        echo -e " ${RED}✗${NC} ${distro} (${MODES[$distro]}) - ${r}"
+        echo -e " ${RED}✗${NC} ${distro} - ${r}"
     fi
 done
 echo ""

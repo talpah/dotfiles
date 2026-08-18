@@ -28,12 +28,12 @@ touching `install.sh`, the module load order, or a tool guard, since those
 failure modes only appear on a machine that lacks the tools.
 
 Container tests live in `test/docker/`: one `Dockerfile.<distro>` per image and
-`assert.sh`, which runs inside. `MODE=full` runs `install.sh` (apt distros);
-`MODE=shell` asserts the installers refuse cleanly and then verifies the zsh
-config in isolation (non-apt distros). Containers get passwordless `chsh` via a
-`pam_permit` line, without which the shell switch silently no-ops and goes
-untested. Note `test-docker.sh` lives at the top level, not in `bin/` —
-`install.sh` symlinks everything in `bin/` into `~/bin`.
+`assert.sh`, which runs inside and has a single path — every image is apt-based,
+because the installers support nothing else. Adding a non-apt distro means
+adding real package-manager support first, not a test. Containers get
+passwordless `chsh` via a `pam_permit` line, without which the shell switch
+silently no-ops and goes untested. Note `test-docker.sh` lives at the top level,
+not in `bin/` — `install.sh` symlinks everything in `bin/` into `~/bin`.
 
 ## Architecture
 

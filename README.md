@@ -53,20 +53,15 @@ make clean         # delete backup/ (destroys pre-install originals - prompts)
 verifies the result. Each container gets passwordless `sudo` **and**
 passwordless `chsh`, so the shell switch is exercised rather than skipped.
 
-| Image | Mode | Covers |
-| ----- | ---- | ------ |
-| `debian:trixie-slim` | full | `install.sh` end to end from a base with no zsh, git or curl |
-| `ubuntu:24.04` | full | same apt path on a different base |
-| `fedora:41` | shell | installers refuse cleanly on a non-apt distro; zsh config still loads |
-
-The installers are apt-only by design, so Fedora asserts graceful refusal
-rather than a working install. The zsh modules themselves are distro-agnostic
-and are verified on all three.
+| Image | Covers |
+| ----- | ------ |
+| `debian:trixie-slim` | `install.sh` end to end from a base with no zsh, git or curl |
+| `ubuntu:24.04` | the same apt path on a different base |
 
 ```bash
-./test-docker.sh                 # everything
-./test-docker.sh debian ubuntu   # a subset
-KEEP=1 ./test-docker.sh debian   # keep the container to poke at
+./test-docker.sh            # everything
+./test-docker.sh debian     # a subset
+KEEP=1 ./test-docker.sh     # keep containers to poke at
 ```
 
 ## Modern CLI replacements

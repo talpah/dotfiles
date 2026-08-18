@@ -1,24 +1,37 @@
-# SSH agent - quiet mode
+# ============================================================================
+# .zshrc - thin loader. Real configuration lives in ${DOTFILES}/zsh/*.zsh
+# ============================================================================
+# Machine-specific settings belong in ~/.zshrc.local (sourced last, untracked).
+
+# SSH agent - quiet mode (must precede oh-my-zsh)
 zstyle :omz:plugins:ssh-agent quiet yes
 
-# Enable Powerlevel10k instant prompt (keep at top)
+# Powerlevel10k instant prompt (keep at top, before any output)
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Resolve the dotfiles repo by following this file's own symlink
+DOTFILES="${${(%):-%N}:A:h}"
+export DOTFILES
+
 # ============================================================================
-# Oh My Zsh Configuration
+# Oh My Zsh
 # ============================================================================
 
 export ZSH="${HOME}/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# Completion settings
 COMPLETION_WAITING_DOTS="true"
 ZSH_DISABLE_COMPFIX=true
+DISABLE_MAGIC_FUNCTIONS=true       # faster paste in large buffers
 
-# Plugins (docker includes compose v2 support)
+# Custom completions must join fpath before oh-my-zsh runs compinit
+fpath=("${DOTFILES}/zfunc" $fpath)
+
+# zsh-syntax-highlighting must stay last in this list
 plugins=(
+    tmux
     git
     common-aliases
     docker
@@ -29,112 +42,55 @@ plugins=(
     ssh-agent
     aws
     zsh-navigation-tools
-    ruff
+    zsh-autosuggestions
+    zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 # ============================================================================
-# Modern ZSH Settings
+# Shell options
 # ============================================================================
 
-# History improvements
-setopt EXTENDED_HISTORY          # Write timestamp to history
-setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicates first
-setopt HIST_IGNORE_DUPS          # Don't record duplicates
-setopt HIST_IGNORE_SPACE         # Don't record commands starting with space
-setopt HIST_VERIFY               # Show command before running from history
-setopt SHARE_HISTORY             # Share history between sessions
+# History
+setopt EXTENDED_HISTORY          # write timestamps
+setopt HIST_EXPIRE_DUPS_FIRST    # expire duplicates first
+setopt HIST_IGNORE_DUPS          # don't record duplicates
+setopt HIST_IGNORE_SPACE         # don't record commands starting with space
+setopt HIST_REDUCE_BLANKS        # strip superfluous whitespace
+setopt HIST_VERIFY               # confirm before running from history
+setopt SHARE_HISTORY             # share history between sessions
+HISTSIZE=100000
+SAVEHIST=100000
 
 # Directory navigation
-setopt AUTO_CD                   # cd by typing directory name
-setopt AUTO_PUSHD                # Push directories onto stack
-setopt PUSHD_IGNORE_DUPS         # Don't push duplicates
-setopt PUSHD_SILENT              # Don't print directory stack
+setopt AUTO_CD                   # cd by typing a directory name
+setopt AUTO_PUSHD                # push directories onto the stack
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT
 
-# Globbing
-setopt EXTENDED_GLOB             # Extended globbing syntax
-
-# Completion improvements
+# Globbing and completion
+setopt EXTENDED_GLOB
 setopt COMPLETE_IN_WORD
 setopt AUTO_MENU
 setopt AUTO_LIST
+setopt INTERACTIVE_COMMENTS      # allow # comments at the prompt
 
 # ============================================================================
-# PATH Configuration
+# Modules
 # ============================================================================
 
-# Helper function to add to PATH only if directory exists and not already in PATH
-add_to_path() {
-    if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
-        export PATH="$1:$PATH"
-    fi
-}
-
-# Add custom paths
-add_to_path "${HOME}/bin"
-add_to_path "${HOME}/.local/bin"
+for _zsh_module in "${DOTFILES}"/zsh/*.zsh(N); do
+    source "${_zsh_module}"
+done
+unset _zsh_module
 
 # ============================================================================
-# Environment
-# ============================================================================
-
-export LANG=en_US.UTF-8
-export EDITOR=vim
-
-# Load local environment if exists
-[[ -e "$HOME/.zshenv" ]] && source "$HOME/.zshenv"
-
-# ============================================================================
-# Completions
-# ============================================================================
-
-# Custom completions (ruff, etc.)
-fpath=(~/.dotfiles/zfunc $fpath)
-
-# Cache completions for faster startup (rebuild daily)
-autoload -Uz compinit
-if [[ -n ${HOME}/.zcompdump(#qN.mh+24) ]]; then
-    compinit
-else
-    compinit -C
-fi
-
-# ============================================================================
-# Key Bindings
-# ============================================================================
-
-# zsh-navigation-tools
-zle -N znt-cd-widget
-bindkey "^B" znt-cd-widget
-zle -N znt-kill-widget
-bindkey "^Y" znt-kill-widget
-
-# ============================================================================
-# Tool Integrations
+# Local overrides
 # ============================================================================
 
 # Powerlevel10k prompt config
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Homebrew (Linuxbrew)
-if [[ -d /home/linuxbrew/.linuxbrew ]]; then
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
-
-# LM Studio CLI
-[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
-
-# SOPS encryption
-export SOPS_AGE_KEY_FILE="$HOME/.sops/age.agekey"
-
-# ============================================================================
-# Aliases
-# ============================================================================
-
-# GitLab merge request
-alias mr='glab mr create -t "$(git rev-parse --abbrev-ref HEAD)" -d "Resolve $(git rev-parse --abbrev-ref HEAD)"'
-
-# batcat (Ubuntu package name)
-command -v batcat &> /dev/null && alias bat='batcat'
-command -v batcat &> /dev/null && alias cat='batcat'
+# Machine-specific config and anything installers append. Keep this last.
+[[ -f "${HOME}/.zshrc.local" ]] && source "${HOME}/.zshrc.local"

@@ -56,14 +56,38 @@ for dotfile in "${DOTFILES[@]}"; do
     if [[ -L "${target_file}" ]]; then
         log_info "  Removing existing symlink: ${dotfile}"
         rm -f "${target_file}"
-    elif [[ -e "${target_file}" && ! -e "${backup_file}" ]]; then
-        log_info "  Backing up existing ${dotfile}"
-        mv "${target_file}" "${backup_file}"
+    elif [[ -e "${target_file}" ]]; then
+        # Never overwrite a real file. The first backup is the pristine
+        # original and is kept forever; later ones get a timestamp so a
+        # diverged file is preserved rather than silently replaced.
+        if [[ ! -e "${backup_file}" ]]; then
+            log_info "  Backing up existing ${dotfile}"
+            mv "${target_file}" "${backup_file}"
+        else
+            dated_backup="${backup_file}.$(date +%Y%m%d-%H%M%S)"
+            log_warn "  ${dotfile} exists and a backup is already present"
+            log_warn "  Preserving current version as $(basename "${dated_backup}")"
+            mv "${target_file}" "${dated_backup}"
+        fi
     fi
 
     ln -sf "${source_file}" "${target_file}"
     log_info "  Linked ${dotfile}"
 done
+
+# Machine-specific overrides, sourced last by .zshrc and never tracked
+readonly ZSHRC_LOCAL="${HOME}/.zshrc.local"
+if [[ ! -e "${ZSHRC_LOCAL}" ]]; then
+    cat > "${ZSHRC_LOCAL}" <<'EOF'
+# Machine-specific zsh configuration.
+# Not tracked in the dotfiles repo. Sourced last by ~/.zshrc, so anything
+# here overrides the repo defaults. Installers that append to your shell
+# config should be redirected here.
+EOF
+    log_info "Created ${ZSHRC_LOCAL} for machine-specific settings"
+else
+    log_info "${ZSHRC_LOCAL} already exists, leaving it alone"
+fi
 
 # Application configs
 log_info "Linking application configs..."

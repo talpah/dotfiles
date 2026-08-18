@@ -52,4 +52,25 @@ else
     git -C "${P10K_DIR}" pull --quiet || log_warn "Failed to update powerlevel10k"
 fi
 
+# Install custom zsh plugins referenced by .zshrc
+readonly PLUGIN_DIR="${OMZ_DIR}/custom/plugins"
+mkdir -p "${PLUGIN_DIR}"
+
+install_zsh_plugin() {
+    local name="$1" url="$2" dir="${PLUGIN_DIR}/$1"
+
+    if [[ ! -d "${dir}" ]]; then
+        log_info "Installing ${name}..."
+        git clone --depth=1 "${url}" "${dir}"
+    else
+        log_info "${name} already installed, updating..."
+        git -C "${dir}" pull --quiet || log_warn "Failed to update ${name}"
+    fi
+}
+
+install_zsh_plugin zsh-autosuggestions \
+    https://github.com/zsh-users/zsh-autosuggestions.git
+install_zsh_plugin zsh-syntax-highlighting \
+    https://github.com/zsh-users/zsh-syntax-highlighting.git
+
 log_info "Essentials installation complete"

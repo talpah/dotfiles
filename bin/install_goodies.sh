@@ -84,13 +84,57 @@ sudo apt-get update
 readonly PACKAGES=(
     ca-certificates curl gnupg lsb-release
     tilix mc btop vim build-essential
-    bat gh glab
+    bat gh glab shellcheck trash-cli
     docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 )
 
 if ! sudo apt-get install -y "${PACKAGES[@]}"; then
     log_error "Package installation failed"
     exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Modern CLI tools via Homebrew
+# ---------------------------------------------------------------------------
+# Homebrew rather than apt: consistent binary names (fd not fdfind, bat not
+# batcat), current versions, and no extra third-party apt repos to maintain.
+readonly BREW_TOOLS=(
+    eza          # ls
+    fd           # find
+    ripgrep      # grep
+    zoxide       # cd
+    fzf          # fuzzy finder
+    git-delta    # git diff pager
+    atuin        # shell history
+    lazygit      # git TUI
+    lazydocker   # docker TUI
+    dust         # du
+    duf          # df
+    procs        # ps
+    sd           # sed
+    jq yq        # JSON / YAML
+    difftastic   # structural diff
+    hyperfine    # benchmarking
+    ast-grep     # structural code search
+    tldr         # concise man pages
+)
+
+if ! command -v brew &> /dev/null; then
+    log_warn "Homebrew not found. Install it to get the modern CLI tools:"
+    # shellcheck disable=SC2016  # literal command for the user to copy, not expanded here
+    log_warn '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+    log_warn "Then re-run this script."
+else
+    log_info "Installing modern CLI tools via Homebrew..."
+    for tool in "${BREW_TOOLS[@]}"; do
+        if brew list --formula "${tool}" &> /dev/null; then
+            log_info "  ${tool} already installed"
+        elif brew install "${tool}"; then
+            log_info "  ✓ ${tool}"
+        else
+            log_warn "  ✗ ${tool} failed to install"
+        fi
+    done
 fi
 
 # Verify critical packages
@@ -120,3 +164,8 @@ echo "  docker --version"
 echo "  gh --version"
 echo "  glab --version"
 echo "  bat --version"
+echo "  eza --version"
+echo ""
+echo "New shell integrations (restart your shell to pick them up):"
+echo "  Ctrl+R  history search      Ctrl+T  file finder      Alt+C  cd finder"
+echo "  cd      zoxide (frecency)   cdi     interactive jump"

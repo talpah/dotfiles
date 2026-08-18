@@ -6,8 +6,10 @@
 [core]
 	editor = vim
 	autocrlf = input
-	pager = less -FRX
+	# Shell form so a machine without delta falls back to less instead of erroring
+	pager = delta 2>/dev/null || less -FRX
 	whitespace = trailing-space,space-before-tab
+	untrackedCache = true
 
 [init]
 	defaultBranch = main
@@ -19,19 +21,58 @@
 [fetch]
 	prune = true
 	prunetags = true
+	writeCommitGraph = true
 
 [rebase]
 	autoStash = true
 	autoSquash = true
+	updateRefs = true
 
 [merge]
 	conflictStyle = zdiff3
+
+[rerere]
+	enabled = true
+	autoUpdate = true
+
+[branch]
+	sort = -committerdate
+
+[tag]
+	sort = version:refname
+
+[column]
+	ui = auto
+
+[maintenance]
+	auto = true
+	strategy = incremental
 
 [diff]
 	algorithm = histogram
 	colorMoved = default
 	colorMovedWS = allow-indentation-change
 	wordDiff = color
+	renames = copies
+	mnemonicPrefix = true
+
+# Structural diffing. Opt in per command: `git dft`, `git dfts`.
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
+
+[difftool]
+	prompt = false
+
+# git-delta: syntax-highlighted pager. Falls back gracefully if delta is
+# absent - git just reports the missing pager and pipes to the terminal.
+[delta]
+	navigate = true
+	line-numbers = true
+	hyperlinks = true
+	side-by-side = false
+
+[interactive]
+	diffFilter = delta --color-only 2>/dev/null || cat
 
 [log]
 	date = iso
@@ -85,6 +126,25 @@
 	aliases = config --get-regexp alias
 	stash-all = stash save --include-untracked
 	gone = ! git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' refs/heads | awk '$2 == \"[gone]\" {print $1}' | xargs -r git branch -D
+
+	# Worktrees (see the `ccw` shell function)
+	wt = worktree
+	wtl = worktree list
+	wta = worktree add
+	wtr = worktree remove
+
+	# Structural diff via difftastic
+	dft = -c diff.external=difft diff
+	dfts = -c diff.external=difft show
+
+	# Review helpers
+	recent = for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short) %(committerdate:relative)'
+	staged = diff --cached
+	unstage = restore --staged
+	discard = restore
+	fixup = commit --fixup
+	wip = !git add -A && git commit -m 'wip: work in progress --wip--'
+	unwip = !git log -1 --pretty=%s | grep -q -- '--wip--' && git reset HEAD~1
 
 [color]
 	ui = auto
